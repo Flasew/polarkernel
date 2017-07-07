@@ -115,13 +115,13 @@ pci_p_log(void * arg, int pending)
     mtx_lock(&ilog_mtx);
 
     int which = ilog_sc.which;
-    if (atomic_add_int
-            (&(ilog_sc.logArr[which].nlogs), 1) >= ARR_SIZE) {
+    atomic_add_int(&(ilog_sc.logArr[which].nlogs), 1);    
+    if (ilog_sc.logArr[which].nlogs >= ARR_SIZE) {
         uprintf("Buffer overflowed - cleared.\n");
         ilog_sc.logArr[which].nlogs = 1;
     }
 
-    snprintf(ilog_sc.ilogq[which].logs[ilog_sc.logArr[which].nlogs - 1],
+    snprintf(ilog_sc.logArr[which].logs[ilog_sc.logArr[which].nlogs - 1],
         BUF_SIZE - 1, "[%ld: %ld]: Interrupt caught.\n", 
         tsp.tv_sec, tsp.tv_nsec );
 
@@ -135,7 +135,7 @@ pci_p_intr(void * arg)
 
     // output...
 
-    taskqueue_enqueue(taskqueue_swi, &sc->log_task)
+    taskqueue_enqueue(taskqueue_swi, &sc->log_task);
 
 }
 
@@ -163,7 +163,7 @@ ilog_read(struct cdev * dev, struct uio * uio, int ioflag)
 
     int error = 0;
     int amount;
-    for (int i = 0; i < ilog_sc.logq[which].nlogs; i++) {
+    for (int i = 0; i < ilog_sc.logArr[which].nlogs; i++) {
         amount = MIN(uio->uio_resid,
             (strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset > 0) ?
              strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset : 0) ;

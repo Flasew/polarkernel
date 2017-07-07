@@ -8,7 +8,7 @@
 #define BUF_SIZE 512
 
 MALLOC_DECLARE(M_ILOG);
-MALLOC_DEFINE(M_ILOG, "ilog_buffer", "individual log")
+MALLOC_DEFINE(M_ILOG, "ilog_buffer", "individual log");
 
 struct pci_p_softc {
     struct task     log_task;
