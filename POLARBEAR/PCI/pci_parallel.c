@@ -216,14 +216,13 @@ pci_p_attach(device_t dev)
         bus_release_resource(dev, SYS_RES_IRQ, sc->irq_rid, sc->irq);
         return (error);
     }
-
-    TASK_INIT(&sc->log_task, 0, pci_p_log, dev);
     mtx_init(&ilog_mtx, "ilog_mtx", NULL, MTX_DEF);
+    TASK_INIT(&sc->log_task, 0, pci_p_log, dev);
 
     sc->cdev = make_dev(&pci_p_cdevsw, unit, 1001, GID_WHEEL, 0600, 
             "pcip%d", unit);
-    sc->log_cdev = make_dev(&ilog_cdevsw, 0, 1001, GID_WHEEL, 0600, "p2plog");
     sc->cdev->si_drv1 = sc;
+    
 
     return (0);
 }
@@ -245,6 +244,27 @@ pci_p_detach(device_t dev)
     return (0);
 }
 
+static int 
+pci_p_load(struct module *m, int event, void *arg) {
+    
+    static struct cdev * ilog_cdev;
+
+    switch (event) {
+        case MOD_LOAD:
+            ilog_cdev = make_dev(&ilog_cdevsw, 0, 
+                    1001, GID_WHEEL, 0600, "p2plog");
+            uprintf("ILOG LOADED\n");
+            break;
+        case MOD_UNLOAD:
+            destroy_dev(ilog_cdev);
+            uprintf("ILOG UNLOADED\n");
+            break;
+        default: 
+            return (EINVAL);
+    }
+    return 0;
+}
+
 
 static device_method_t pci_p_methods[] = {
     // DEVMETHOD(device_identify,  pci_p_identify),
@@ -260,5 +280,5 @@ static driver_t pci_p_driver = {
     sizeof(struct pci_p_softc)
 };
 
-DRIVER_MODULE(pcip, pci, pci_p_driver, pci_p_devclass, 0, 0);
+DRIVER_MODULE(pcip, pci, pci_p_driver, pci_p_devclass, pci_p_load, 0);
 
