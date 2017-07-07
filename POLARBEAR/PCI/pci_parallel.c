@@ -222,7 +222,7 @@ pci_p_attach(device_t dev)
 
     sc->cdev = make_dev(&pci_p_cdevsw, unit, 1001, GID_WHEEL, 0600, 
             "pcip%d", unit);
-    sc->log_cdev = make_dev(&ilog_cdevsw, unit, 1001, GID_WHEEL, 0600, "ilog");
+    sc->log_cdev = make_dev(&ilog_cdevsw, 0, 1001, GID_WHEEL, 0600, "ilog");
     sc->cdev->si_drv1 = sc;
 
     return (0);
@@ -234,7 +234,7 @@ pci_p_detach(device_t dev)
     struct pci_p_softc * sc = device_get_softc(dev);
 
     destroy_dev(sc->cdev);
-    destroy_dev(sc->log_cdev);
+    // destroy_dev(sc->log_cdev);
 
     bus_teardown_intr(dev, sc->irq, sc->icookie);
     bus_release_resource(dev, SYS_RES_IRQ, sc->irq_rid, sc->irq);
