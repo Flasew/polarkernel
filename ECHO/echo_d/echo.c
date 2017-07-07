@@ -104,7 +104,7 @@ echo_modevent(module_t mod __unused, int event, void *arg __unused){
             echo_dev = make_dev(&echo_cdevsw, 0, UID_ROOT, GID_WHEEL,
                         0600, "echo");
              echo2_dev = make_dev(&echo2_cdevsw, 0, UID_ROOT, GID_WHEEL,
-                        0600, "echo2");
+                        0600, "echo");
            
             uprintf("Echo driver loaded.\n");
             break;

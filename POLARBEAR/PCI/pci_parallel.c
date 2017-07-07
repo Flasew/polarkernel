@@ -222,7 +222,7 @@ pci_p_attach(device_t dev)
 
     sc->cdev = make_dev(&pci_p_cdevsw, unit, 1001, GID_WHEEL, 0600, 
             "pcip%d", unit);
-    sc->log_cdev = make_dev(&ilog_cdevsw, 0, 1001, GID_WHEEL, 0600, "ilog");
+    sc->log_cdev = make_dev(&ilog_cdevsw, 0, 1001, GID_WHEEL, 0600, "p2plog");
     sc->cdev->si_drv1 = sc;
 
     return (0);
