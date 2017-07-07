@@ -19,6 +19,8 @@
 #include <dev/pci/pcireg.h>
 #include <dev/pci/pcivar.h>
 
+#include <sys/time.h>
+
 #define PPVID 0x9710
 #define PPDID 0x9912
 
@@ -166,9 +168,14 @@ pci_p_detach(device_t dev)
 static void
 pci_p_intr(void * arg)
 {
-    // struct pci_p_softc * sc = arg;
+    struct pci_p_softc * sc = arg;
+    device_t dev = sc -> device;
 
-    uprintf("INTERRUPT FROM PCI-PARALLEL CARD CAUGHT.\n");
+    struct timespec tsp;
+    nanouptime(&tsp);
+
+    device_printf(dev, "[%ld: %ld] INTERRUPT FROM PCI-PARALLEL CARD CAUGHT.\n", 
+            tsp.tv_sec, tsp.tv_nsec);
 }
 
 static device_method_t pci_p_methods[] = {
