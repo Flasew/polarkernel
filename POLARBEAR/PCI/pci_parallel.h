@@ -13,7 +13,7 @@ MALLOC_DEFINE(M_ILOG, "ilog_buffer", "individual log");
 struct pci_p_softc {
     struct task     log_task;
     struct cdev     *cdev;
-    struct cdev     *log_cdev;
+    // struct cdev     *log_cdev;
     struct resource *irq;
     void            *icookie;
     device_t        device;
