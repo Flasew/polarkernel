@@ -21,22 +21,13 @@
 
 #include <sys/time.h>
 
-#define PPVID 0x9710
-#define PPDID 0x9912
+#include "pci_parallel.h"
 
-struct pci_p_softc {
-	device_t	    device;
-	struct cdev	    *cdev;
-	struct resource *irq;
-    int             irq_rid;
-	void		    *icookie;
-};
-
-static d_open_t		pci_p_open;
-static d_close_t	pci_p_close;
-static d_read_t		pci_p_read;
-static d_write_t	pci_p_write;
-// static d_poll_t		pci_p_poll;
+// pci-p stuff
+static d_open_t     pci_p_open;
+static d_close_t    pci_p_close;
+static d_read_t     pci_p_read;
+static d_write_t    pci_p_write;
 
 static int pci_p_probe(device_t);
 static int pci_p_attach(device_t);
@@ -45,35 +36,51 @@ static int pci_p_detach(device_t);
 static void pci_p_intr(void*);
 
 static struct cdevsw pci_p_cdevsw = {
-	.d_version = 	D_VERSION,
-	.d_open    = 	pci_p_open,
-	.d_close   = 	pci_p_close,
-	.d_read    =    pci_p_read,
-	.d_write   =    pci_p_write,
-	// .d_poll	   =    pci_p_poll,
-	.d_name	   =    "pci_p_card"
+    .d_version =    D_VERSION,
+    .d_open    =    pci_p_open,
+    .d_close   =    pci_p_close,
+    .d_read    =    pci_p_read,
+    .d_write   =    pci_p_write,
+    .d_name    =    "pci_p_card"
 };
-	 
+     
 static devclass_t pci_p_devclass;
+
+// ilog stuff
+struct mtx          ilog_mtx;
+
+static d_open_t     ilog_open;
+static d_close_t    ilog_close;
+static d_read_t     ilog_read;
+
+static struct cdevsw ilog_cdevsw = {
+    .d_version =    D_VERSION,
+    .d_open    =    ilog_open,
+    .d_close   =    ilog_close,
+    .d_read    =    ilog_read,
+    .d_name    =    "ilog_device"
+}
+
+struct intr_log_softc ilog_sc = { 0 };
 
 static int
 pci_p_open(struct cdev * dev, int oflags, int devtype, struct thread * td)
 {
-	struct pci_p_softc * sc;
-	
-	sc = dev -> si_drv1;
-	device_printf(sc->device, "opened P2P successfully.\n");
-	return (0);
+    struct pci_p_softc * sc;
+    
+    sc = dev -> si_drv1;
+    device_printf(sc->device, "opened P2P successfully.\n");
+    return (0);
 }
 
 static int
 pci_p_close(struct cdev * dev, int fflag, int devtype, struct thread * td)
 {
-	struct pci_p_softc * sc;
-	
-	sc = dev -> si_drv1;
-	device_printf(sc->device, "closed P2P successfully.\n");
-	return (0);
+    struct pci_p_softc * sc;
+    
+    sc = dev -> si_drv1;
+    device_printf(sc->device, "closed P2P successfully.\n");
+    return (0);
 }
 
 static int
@@ -87,7 +94,6 @@ pci_p_read(struct cdev * dev, struct uio * uio, int ioflag)
 }
 
 
-
 static int
 pci_p_write(struct cdev * dev, struct uio * uio, int ioflag)
 {
@@ -98,15 +104,78 @@ pci_p_write(struct cdev * dev, struct uio * uio, int ioflag)
     return (0);
 }
 
-// static void
-// pci_p_identify(driver_t * driver, device_t parent)
-// {
-//     device_t dev;
-// 
-//     dev = device_find_child(parent, "pcip", -1);
-//     if (!dev)
-//         BUS_ADD_CHILD(parent, 0, "pcip", -1);
-// }
+static void 
+pci_p_log(void * arg, int pending)
+{
+    struct timespec tsp;
+    nanouptime(&tsp);
+
+    mtx_lock(&ilog_mtx);
+
+    int which = ilog_sc.which;
+    if (atomic_add_int
+            (&(ilog_sc.logArr[which].nlogs), 1) >= ARR_SIZE) {
+        uprintf("Buffer overflowed - cleared.\n");
+        ilog_sc.logArr[which].nlogs = 1;
+    }
+
+    snprintf(ilog_sc.ilogq[which].logs[ilog_sc.logArr[which].nlogs - 1],
+        BUF_SIZE - 1, "[%ld: %ld]: Interrupt caught.\n", 
+        tsp.tv_sec, tsp.tv_nsec );
+
+    mtx_unlock(&ilog_mtx);
+}
+
+static void
+pci_p_intr(void * arg)
+{
+    struct pci_p_softc * sc = arg;
+
+    // output...
+
+    taskqueue_enqueue(taskqueue_swi, &sc->log_task)
+
+}
+
+static int 
+ilog_open(struct cdev * dev, int oflags, int devtype, struct thread * td)
+{
+    uprintf("Opening ilog device...\n");
+    return 0;
+}
+
+static int
+ilog_close(struct cdev * dev, int fflag, int devtype, struct thread * td)
+{
+    uprintf("Closing ilog device...\n");
+    return 0;
+}
+
+static int
+ilog_read(struct cdev * dev, struct uio * uio, int ioflag)
+{
+    mtx_lock(&ilog_mtx);
+    int which = ilog_sc.which;
+    ilog_sc.which = !which;
+    mtx_unlock(&ilog_mtx);
+
+    int error = 0;
+    int amount;
+    for (int i = 0; i < ilog_sc.logq[which].nlogs; i++) {
+        amount = MIN(uio->uio_resid,
+            (strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset > 0) ?
+             strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset : 0) ;
+
+        error = uiomove(echo_message->buffer + uio->uio_offset, amount, uio);
+
+        if (error != 0) {
+            uprintf("Read failed.\n");
+            break;
+        }
+    }
+
+    return error;
+}
 
 static int
 pci_p_probe(device_t dev)
@@ -145,8 +214,12 @@ pci_p_attach(device_t dev)
         return (error);
     }
 
+    TASK_INIT(&sc->log_task, 0, pci_p_log, dev);
+    mtx_init(&ilog_mtx, "ilog_mtx", NULL, MTX_DEF);
+
     sc->cdev = make_dev(&pci_p_cdevsw, unit, 1001, GID_WHEEL, 0600, 
             "pcip%d", unit);
+    sc->log_cdev = make_dev(&ilog_cdevsw, unit, 1001, GID_WHEEL, 0600, "ilog");
     sc->cdev->si_drv1 = sc;
 
     return (0);
@@ -158,25 +231,17 @@ pci_p_detach(device_t dev)
     struct pci_p_softc * sc = device_get_softc(dev);
 
     destroy_dev(sc->cdev);
+    destroy_dev(sc->log_cdev);
 
     bus_teardown_intr(dev, sc->irq, sc->icookie);
     bus_release_resource(dev, SYS_RES_IRQ, sc->irq_rid, sc->irq);
 
+    taskqueue_drain(taskqueue_swi, &sc->log_task);
+    mtx_destroy(&ilog_mtx);
+
     return (0);
 }
 
-static void
-pci_p_intr(void * arg)
-{
-    struct pci_p_softc * sc = arg;
-    device_t dev = sc -> device;
-
-    struct timespec tsp;
-    nanouptime(&tsp);
-
-    device_printf(dev, "[%ld: %ld] INTERRUPT FROM PCI-PARALLEL CARD CAUGHT.\n", 
-            tsp.tv_sec, tsp.tv_nsec);
-}
 
 static device_method_t pci_p_methods[] = {
     // DEVMETHOD(device_identify,  pci_p_identify),
