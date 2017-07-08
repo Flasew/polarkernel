@@ -132,8 +132,13 @@ static void
 pci_p_intr(void * arg)
 {
     struct pci_p_softc * sc = arg;
-
+    device_t dev = sc->device;
     // output...
+
+    struct timespec tsp;
+    nanouptime(&tsp);
+    device_printf(dev, "INTR: [%ld: %ld]: Interrupt caught.\n", 
+        tsp.tv_sec, tsp.tv_nsec );
 
     taskqueue_enqueue(taskqueue_swi, &sc->log_task);
 
@@ -176,7 +181,7 @@ ilog_read(struct cdev * dev, struct uio * uio, int ioflag)
             break;
         }
     }
-
+    ilog_sc.logArr[which].nlogs = 0;
     return error;
 }
 
