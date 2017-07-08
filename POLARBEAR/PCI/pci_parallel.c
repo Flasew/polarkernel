@@ -15,6 +15,8 @@
 #include <sys/mutex.h>
 #include <sys/condvar.h>
 #include <sys/malloc.h>
+#include <sys/queue.h>
+#include <sys/taskqueue.h>
 
 #include <dev/pci/pcireg.h>
 #include <dev/pci/pcivar.h>
@@ -59,7 +61,7 @@ static struct cdevsw ilog_cdevsw = {
     .d_close   =    ilog_close,
     .d_read    =    ilog_read,
     .d_name    =    "ilog_device"
-}
+};
 
 struct intr_log_softc ilog_sc = { 0 };
 
@@ -166,7 +168,8 @@ ilog_read(struct cdev * dev, struct uio * uio, int ioflag)
             (strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset > 0) ?
              strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset : 0) ;
 
-        error = uiomove(echo_message->buffer + uio->uio_offset, amount, uio);
+        error = uiomove(ilog_sc.logArr[which].logs[i] + uio->uio_offset,
+                 amount, uio);
 
         if (error != 0) {
             uprintf("Read failed.\n");

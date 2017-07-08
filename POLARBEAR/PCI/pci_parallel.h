@@ -7,22 +7,28 @@
 #define ARR_SIZE 8192
 #define BUF_SIZE 512
 
+MALLOC_DECLARE(M_ILOG);
+MALLOC_DEFINE(M_ILOG, "ilog_buffer", "individual log")
+
 struct pci_p_softc {
-    device_t        device;
+    struct task     log_task;
     struct cdev     *cdev;
+    struct cdev     *log_cdev;
     struct resource *irq;
-    int             irq_rid;
     void            *icookie;
+    device_t        device;
+    int             irq_rid;
+};
+
+struct logq {
+    int             nlogs;
+    char            logs[ARR_SIZE][BUF_SIZE];
 };
 
 struct intr_log_softc {
     int             which;
     struct logq     logArr[2];
-}
+};
 
-struct logq {
-    int             nlogs;
-    char            logs[ARR_SIZE][BUF_SIZE];
-}
 
 #endif
