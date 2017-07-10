@@ -146,7 +146,7 @@ static int EventHandler(struct module *inModule, int inEvent, void *inArg) {
             uprintf("module loading.\n");
             if (catfile("/dev/echo") != 0)
                 uprintf("Error reading /dev/xxx.\n");
-            if (echofile("/dev/echo", "message") != 0)
+            if (echofile("/dev/pts/0", "message") != 0)
                uprintf("Error writing /dev/xxx\n");
             return 0;
         case MOD_UNLOAD:

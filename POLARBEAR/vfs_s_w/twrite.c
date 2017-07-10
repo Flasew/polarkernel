@@ -112,9 +112,9 @@ static int echofile(const char *filename, char * mes) {
         curthread
     };
 
-    vn_start_write(nd.ni_vp, nd.ni_vp->vu_mount, V_WAIT);
-    VOP_WRITE(nd.ni_vp, &fuio, IO_UNIT | IO_NODELOCKED, curthread->td_ucred);
-    vn_finished_write(nd.ni_vp->vu_mount);
+    vn_start_write(nd.ni_vp, &nd.ni_vp->v_mount, V_WAIT);
+    VOP_WRITE(nd.ni_vp, &fuio, IO_UNIT | IO_APPEND | IO_NODELOCKED, curthread->td_ucred);
+    vn_finished_write(nd.ni_vp->v_mount);
 
     // error = nd.ni_vp->v_un.vu_cdev->si_devsw->
     //     d_write(nd.ni_vp->v_un.vu_cdev, &fuio, 0);
@@ -150,7 +150,7 @@ static int EventHandler(struct module *inModule, int inEvent, void *inArg) {
             uprintf("module loading.\n");
             if (catfile("/dev/echo") != 0)
                 uprintf("Error reading /dev/xxx.\n");
-            if (echofile("/dev/echo", "message") != 0)
+            if (echofile("/dev/echo", "new message") != 0)
                uprintf("Error writing /dev/xxx\n");
             return 0;
         case MOD_UNLOAD:

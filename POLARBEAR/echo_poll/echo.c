@@ -81,6 +81,7 @@ echo_write(struct cdev * dev, struct uio * uio, int ioflag){
     int amount;
 
     cv_signal(&rw_cv);
+    uprintf("Read called.\n");
 
     // error = copyin(uio->uio_iov->iov_base, echo_message->buffer,
     //        MIN(uio->uio_iov->iov_len, BUFFER_SIZE - 1));
@@ -113,6 +114,7 @@ echo_read(struct cdev * dev, struct uio * uio, int ioflag){
     int amount;
 
     cv_signal(&rw_cv);
+    uprintf("Read called.\n");
 
     amount = MIN(uio->uio_resid,
                 (echo_message->length - uio->uio_offset > 0) ?
@@ -151,13 +153,14 @@ static int
 echo_poll(struct cdev *dev, int events, struct thread * td){
     int error = 0;
     uprintf("poll function called, event number %x\n", events);
-    if (events & POLLIN) {
+    if (events == 0x58) {
         uprintf("read poll\n");
-        mtx_lock(&rw_mtx);
-        cv_wait(&rw_cv, &rw_mtx);
-        mtx_unlock(&rw_mtx);
+        return POLLIN;
+        // mtx_lock(&rw_mtx);
+        // cv_wait(&rw_cv, &rw_mtx);
+        // mtx_unlock(&rw_mtx);
     }
-    else if (events & POLLOUT) {
+    else if (events == 0x1c) {
         uprintf("write poll\n");
         return POLLOUT;
     }
@@ -166,7 +169,7 @@ echo_poll(struct cdev *dev, int events, struct thread * td){
     }
     uprintf("falling out of poll function\n");
 
-    return error;
+    return POLLERR;
 }
 
 static int 
