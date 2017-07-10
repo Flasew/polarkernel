@@ -31,7 +31,7 @@ static int catfile(const char *filename) {
     }
 
     NDFREE(&nd, NDF_ONLY_PNBUF);
-    vn_printf(nd.ni_vp,"vnode /dev/null\n");
+    
 
     ofs = 0;
     len = sizeof(buf) - 1;
@@ -104,8 +104,8 @@ static int echofile(const char *filename, char * mes) {
     while (1) {
         uprintf("loop %d: \n", loopc);
         error = vn_rdwr(UIO_WRITE, nd.ni_vp, mes, len, ofs,
-                UIO_SYSSPACE, IO_NODELOCKED, curthread->td_ucred,
-                NOCRED, &resid, curthread);
+                UIO_SYSSPACE, IO_NODELOCKED | IO_UNIT | IO_APPEND ,
+                curthread->td_ucred, NOCRED, &resid, curthread);
         if (error) {
             uprintf("error writing, %d\n", error);
             break;
