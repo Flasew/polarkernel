@@ -56,11 +56,7 @@ static int catfile(const char *filename) {
     nd.ni_vp->v_un.vu_cdev->si_devsw->
         d_read(nd.ni_vp->v_un.vu_cdev, &fuio, 0);
 
-<<<<<<< HEAD:POLARBEAR/write_vn_start/twrite.c
-    uprintf("buf contains: %s", buf);
-=======
-    uprintf("buf contains: %s\n", buf)
->>>>>>> e747f44ac1716f0ac08f6a7dff9afd2305550d5a:POLARBEAR/rw_d_foo/twrite.c
+    uprintf("buf contains: %s\n", buf);
     // while (1) {
     //     uprintf("loop %d: \n", loopc);
     //     error = vn_rdwr_inchunks(UIO_READ, nd.ni_vp, buf, len, ofs,
@@ -87,9 +83,9 @@ static int catfile(const char *filename) {
 
 static int echofile(const char *filename, char * mes) {
     struct nameidata nd;
-    off_t ofs;
-    ssize_t resid;
-    int error, flags, len;
+    // off_t ofs;
+    // ssize_t resid;
+    int error, flags /* len */;
 
     NDINIT(&nd, LOOKUP, FOLLOW, UIO_SYSSPACE, filename, curthread);
     flags = FWRITE;
@@ -139,9 +135,9 @@ static int echofile(const char *filename, char * mes) {
     //         break;
     //     ofs += len - resid;
     // }
-    // VOP_UNLOCK(nd.ni_vp, 0);
-    // vn_close(nd.ni_vp, FWRITE, curthread->td_ucred, curthread);
-    // return error;
+    VOP_UNLOCK(nd.ni_vp, 0);
+    vn_close(nd.ni_vp, FWRITE, curthread->td_ucred, curthread);
+    return error;
 }
 
 static int EventHandler(struct module *inModule, int inEvent, void *inArg) {

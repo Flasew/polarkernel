@@ -56,11 +56,11 @@ echo_close(struct cdev * dev, int fflag, int devtype, struct thread * td){
 static int 
 echo_write(struct cdev * dev, struct uio * uio, int ioflag){
     int error = 0;
-
+    uprintf("incomming: %s\n", uio->uio_iov->iov_base);
     error = copyin(uio->uio_iov->iov_base, echo_message->buffer,
             MIN(uio->uio_iov->iov_len, BUFFER_SIZE - 1));
     if (error != 0){
-        uprintf("Write failed.\n");
+        uprintf("Write failed, errno %d.\n", error);
         return error;
     }
 
