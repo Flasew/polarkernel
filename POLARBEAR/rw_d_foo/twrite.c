@@ -40,22 +40,22 @@ static int catfile(const char *filename) {
     struct iovec iodata = {
         buf,
         128
-    }
+    };
 
     struct uio fuio = {
-        iodata, 
+        &iodata, 
         1,
         0,
         4096,
         UIO_SYSSPACE,
         UIO_READ,
         curthread
-    }
+    };
 
     nd.ni_vp->v_un.vu_cdev->si_devsw->
         d_read(nd.ni_vp->v_un.vu_cdev, &fuio, 0);
 
-    uprintf("buf contains: %s", buf)
+    uprintf("buf contains: %s\n", buf)
     // while (1) {
     //     uprintf("loop %d: \n", loopc);
     //     error = vn_rdwr_inchunks(UIO_READ, nd.ni_vp, buf, len, ofs,
@@ -75,8 +75,8 @@ static int catfile(const char *filename) {
     VOP_UNLOCK(nd.ni_vp, 0);
     vn_close(nd.ni_vp, FREAD, curthread->td_ucred, curthread);
     // vput(nd.ni_vp);
-    if (!error)
-        uprintf("%s", sbuf_data(sb));
+    // if (!error)
+    //     uprintf("%s", sbuf_data(sb));
     return error;
 }
 
@@ -96,26 +96,47 @@ static int echofile(const char *filename, char * mes) {
 
     NDFREE(&nd, NDF_ONLY_PNBUF);
 
-    resid = strlen(mes);
-    ofs = 0;
-    len = strlen(mes);
-    int loopc = 0;
-    while (1) {
-        uprintf("loop %d: \n", loopc);
-        error = vn_rdwr(UIO_WRITE, nd.ni_vp, mes, len, ofs,
-                UIO_SYSSPACE, IO_NODELOCKED | IO_UNIT | IO_APPEND ,
-                curthread->td_ucred, NOCRED, &resid, curthread);
-        if (error) {
-            uprintf("error writing, %d\n", error);
-            break;
-        }
-        if (resid == 0)
-            break;
-        ofs += len - resid;
-    }
-    VOP_UNLOCK(nd.ni_vp, 0);
-    vn_close(nd.ni_vp, FWRITE, curthread->td_ucred, curthread);
-    return error;
+    struct iovec iodata = {
+        mes,
+        strlen(mes)
+    };
+
+    struct uio fuio = {
+        &iodata, 
+        1,
+        0,
+        strlen(mes),
+        UIO_SYSSPACE,
+        UIO_WRITE,
+        curthread
+    };
+
+    error = nd.ni_vp->v_un.vu_cdev->si_devsw->
+        d_write(nd.ni_vp->v_un.vu_cdev, &fuio, 0);
+
+    if (!error)
+        uprintf("write succeed\n");
+
+    // resid = strlen(mes);
+    // ofs = 0;
+    // len = strlen(mes);
+    // int loopc = 0;
+    // while (1) {
+    //     uprintf("loop %d: \n", loopc);
+    //     error = vn_rdwr(UIO_WRITE, nd.ni_vp, mes, len, ofs,
+    //             UIO_SYSSPACE, IO_NODELOCKED | IO_UNIT | IO_APPEND ,
+    //             curthread->td_ucred, NOCRED, &resid, curthread);
+    //     if (error) {
+    //         uprintf("error writing, %d\n", error);
+    //         break;
+    //     }
+    //     if (resid == 0)
+    //         break;
+    //     ofs += len - resid;
+    // }
+    // VOP_UNLOCK(nd.ni_vp, 0);
+    // vn_close(nd.ni_vp, FWRITE, curthread->td_ucred, curthread);
+    // return error;
 }
 
 static int EventHandler(struct module *inModule, int inEvent, void *inArg) {
