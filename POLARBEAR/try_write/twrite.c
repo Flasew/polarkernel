@@ -29,15 +29,17 @@ static int catfile(const char *filename) {
     }
 
     NDFREE(&nd, NDF_ONLY_PNBUF);
-    vn_printf(nd.ni_vp,"vnode /dev/echo\n");
+    vn_printf(nd.ni_vp,"vnode /dev/null\n");
 
     ofs = 0;
     len = sizeof(buf) - 1;
     sb = sbuf_new_auto();
+    int loopc = 0;
     // nd.ni->vp->v_un.vu_cdev->si_devsw->d_read(
     while (1) {
-        error = vn_rdwr(UIO_READ, nd.ni_vp, buf, len, ofs,
-                UIO_SYSSPACE,  IO_VMIO | IO_UNIT | IO_NODELOCKED, curthread->td_ucred,
+        uprintf("loop %d: \n", loopc);
+        error = vn_rdwr_inchunks(UIO_READ, nd.ni_vp, buf, len, ofs,
+                UIO_SYSSPACE, IO_NODELOCKED, curthread->td_ucred,
                 NULL, &resid, curthread);
         if (error) {
             uprintf("error reading, %d\n", error);
@@ -77,12 +79,14 @@ static int echofile(const char *filename, char * mes) {
     resid = strlen(mes);
     ofs = 0;
     len = strlen(mes);
+    int loopc = 0;
     while (1) {
+        uprintf("loop %d: \n", loopc);
         error = vn_rdwr(UIO_WRITE, nd.ni_vp, mes, len, ofs,
                 UIO_SYSSPACE, IO_NODELOCKED, curthread->td_ucred,
                 NOCRED, &resid, curthread);
         if (error) {
-            uprintf("error writing\n");
+            uprintf("error writing, %d\n", error);
             break;
         }
         if (resid == 0)
@@ -99,9 +103,9 @@ static int EventHandler(struct module *inModule, int inEvent, void *inArg) {
         case MOD_LOAD:
             uprintf("module loading.\n");
             if (catfile("/dev/echo") != 0)
-                uprintf("Error reading MOTD.\n");
+                uprintf("Error reading /dev/xxx.\n");
             if (echofile("/dev/echo", "message") != 0)
-               uprintf("Error writing /dev/echo\n");
+               uprintf("Error writing /dev/xxx\n");
             return 0;
         case MOD_UNLOAD:
             uprintf("MOTD module unloading.\n");

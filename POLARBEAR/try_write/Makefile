@@ -1,6 +1,6 @@
 MNAME=twrite
 
-SRCS=$(MNAME).c
+SRCS=$(MNAME).c vnode_if.h
 KMOD=$(MNAME)
 
 .include <bsd.kmod.mk>

@@ -115,9 +115,9 @@ pci_p_log(void * arg, int pending)
     mtx_lock(&ilog_mtx);
 
     int which = ilog_sc.which;
-    atomic_add_int(&(ilog_sc.logArr[which].nlogs), 1);    
+    ++ilog_sc.logArr[which].nlogs;    
     if (ilog_sc.logArr[which].nlogs >= ARR_SIZE) {
-        uprintf("Buffer overflowed - cleared.\n");
+        printf("Buffer overflowed - cleared.\n");
         ilog_sc.logArr[which].nlogs = 1;
     }
 
@@ -132,13 +132,13 @@ static void
 pci_p_intr(void * arg)
 {
     struct pci_p_softc * sc = arg;
-    device_t dev = sc->device;
+    // device_t dev = sc->device;
     // output...
 
-    struct timespec tsp;
-    nanouptime(&tsp);
-    device_printf(dev, "INTR: [%ld: %ld]: Interrupt caught.\n", 
-        tsp.tv_sec, tsp.tv_nsec );
+    // struct timespec tsp;
+    // nanouptime(&tsp);
+    // device_printf(dev, "INTR: [%ld: %ld]: Interrupt caught.\n", 
+    //     tsp.tv_sec, tsp.tv_nsec );
 
     taskqueue_enqueue(taskqueue_swi, &sc->log_task);
 
@@ -161,25 +161,31 @@ ilog_close(struct cdev * dev, int fflag, int devtype, struct thread * td)
 static int
 ilog_read(struct cdev * dev, struct uio * uio, int ioflag)
 {
+    uprintf("uio_resid is %zd.\n", uio->uio_resid);
     mtx_lock(&ilog_mtx);
     int which = ilog_sc.which;
     ilog_sc.which = !which;
     mtx_unlock(&ilog_mtx);
 
+    uio->uio_resid = 8192;
     int error = 0;
     int amount;
+    // uprintf("%d logs on hold\n", ilog_sc.logArr[which].nlogs);
     for (int i = 0; i < ilog_sc.logArr[which].nlogs; i++) {
+        // uprintf("LOOP: %d\n", i);
         amount = MIN(uio->uio_resid,
             (strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset > 0) ?
              strlen(ilog_sc.logArr[which].logs[i]) - uio->uio_offset : 0) ;
 
         error = uiomove(ilog_sc.logArr[which].logs[i] + uio->uio_offset,
                  amount, uio);
+        uprintf("uio_resid is %zd.\n", uio->uio_resid);
 
         if (error != 0) {
             uprintf("Read failed.\n");
             break;
         }
+        uio->uio_offset = 0;
     }
     ilog_sc.logArr[which].nlogs = 0;
     return error;

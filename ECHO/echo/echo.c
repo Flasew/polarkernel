@@ -53,6 +53,7 @@ static int
 echo_write(struct cdev * dev, struct uio * uio, int ioflag){
     int error = 0;
 
+    uprintf("in d_write\n");
     error = copyin(uio->uio_iov->iov_base, echo_message->buffer,
             MIN(uio->uio_iov->iov_len, BUFFER_SIZE - 1));
     if (error != 0){
@@ -73,6 +74,7 @@ echo_read(struct cdev * dev, struct uio * uio, int ioflag){
     int error = 0;
     int amount;
 
+    uprintf("in d_read\n");
     amount = MIN(uio->uio_resid,
                 (echo_message->length - uio->uio_offset > 0) ?
                  echo_message->length - uio->uio_offset : 0) ;

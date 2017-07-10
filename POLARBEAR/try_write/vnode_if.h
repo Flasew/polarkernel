@@ -2,7 +2,7 @@
  * This file is produced automatically.
  * Do not modify anything in here by hand.
  *
- * Created from $FreeBSD$
+ * Created from $FreeBSD: releng/11.1/sys/tools/vnode_if.awk 288336 2015-09-28 12:14:16Z avg $
  */
 
 extern struct vnodeop_desc vop_default_desc;
@@ -1824,6 +1824,29 @@ static __inline int VOP_ADD_WRITECOUNT(
 	a.a_vp = vp;
 	a.a_inc = inc;
 	return (VOP_ADD_WRITECOUNT_APV(vp->v_op, &a));
+}
+
+struct vop_fdatasync_args {
+	struct vop_generic_args a_gen;
+	struct vnode *a_vp;
+	struct thread *a_td;
+};
+
+extern struct vnodeop_desc vop_fdatasync_desc;
+
+int VOP_FDATASYNC_AP(struct vop_fdatasync_args *);
+int VOP_FDATASYNC_APV(struct vop_vector *vop, struct vop_fdatasync_args *);
+
+static __inline int VOP_FDATASYNC(
+	struct vnode *vp,
+	struct thread *td)
+{
+	struct vop_fdatasync_args a;
+
+	a.a_gen.a_desc = &vop_fdatasync_desc;
+	a.a_vp = vp;
+	a.a_td = td;
+	return (VOP_FDATASYNC_APV(vp->v_op, &a));
 }
 
 struct vop_spare1_args {

@@ -1,0 +1,1360 @@
+bus_if.m: * This method, along with BUS_WRITE_IVAR() manages a bus-specific set
+bus_if.m: * @brief Write the value of a bus-specific attribute of a device
+bus_if.m: * @param _index	the instance variable to write
+bus_if.m: * @param _value	the value to write to that instance variable
+bus_if.m:METHOD int write_ivar {
+capabilities.conf:aio_write
+capabilities.conf:freebsd6_pwrite
+capabilities.conf:oaio_write
+capabilities.conf:pwrite
+capabilities.conf:pwritev
+capabilities.conf:write
+capabilities.conf:writev
+imgact_aout.c:		MAP_COPY_ON_WRITE | MAP_PREFAULT);
+imgact_aout.c:			MAP_COPY_ON_WRITE | MAP_PREFAULT);
+imgact_elf.c:		    prot | VM_PROT_WRITE, VM_PROT_ALL, MAP_CHECK_EXCL);
+imgact_elf.c:		cow = MAP_COPY_ON_WRITE | MAP_PREFAULT |
+imgact_elf.c:		    (prot & VM_PROT_WRITE ? 0 : MAP_DISABLE_COREDUMP);
+imgact_elf.c:	 * Remove write access to the page if it was only granted by map_insert
+imgact_elf.c:	if ((prot & VM_PROT_WRITE) == 0)
+imgact_elf.c:static int core_write(struct coredump_params *, const void *, size_t, off_t,
+imgact_elf.c: * Write out a core segment to the compression stream.
+imgact_elf.c:		error = gzio_write(p->gzs, buf, chunk_len);
+imgact_elf.c:core_gz_write(void *base, size_t len, off_t offset, void *arg)
+imgact_elf.c:	return (core_write((struct coredump_params *)arg, base, len, offset,
+imgact_elf.c:core_write(struct coredump_params *p, const void *base, size_t len,
+imgact_elf.c:	return (vn_rdwr_inchunks(UIO_WRITE, p->vp, __DECONST(void *, base),
+imgact_elf.c:	error = core_write(p, base, len, offset, UIO_USERSPACE);
+imgact_elf.c:		 * Write a "real" zero byte at the end of the target region
+imgact_elf.c:		error = core_write(p, zero_region, 1, offset + len - 1,
+imgact_elf.c:		error = gzio_write(p->gzs, __DECONST(char *, data), len);
+imgact_elf.c:		error = core_write(p, __DECONST(void *, data), len, p->offset,
+imgact_elf.c:		params.gzs = gzio_init(core_gz_write, GZIO_DEFLATE,
+imgact_elf.c:	 * and write it out following the notes.
+imgact_elf.c:	/* Write the contents of all of the writable segments. */
+imgact_elf.c:		    "Failed to write core file for process %s (error %d)\n",
+imgact_elf.c: * A callback for each_writable_segment() to write out the segment's
+imgact_elf.c: * Write the core file header to the file, including padding up to
+imgact_elf.c:		prot |= VM_PROT_WRITE;
+imgact_elf.c:	if (prot & VM_PROT_WRITE)
+init_sysent.c:	{ AS(write_args), (sy_call_t *)sys_write, AUE_NULL, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 4 = write */
+init_sysent.c:	{ 0, (sy_call_t *)nosys, AUE_NULL, NULL, 0, 0, 0, SY_THR_ABSENT },			/* 68 = obsolete vwrite */
+init_sysent.c:	{ AS(writev_args), (sy_call_t *)sys_writev, AUE_WRITEV, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 121 = writev */
+init_sysent.c:	{ compat6(AS(freebsd6_pwrite_args),pwrite), AUE_PWRITE, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 174 = freebsd6 pwrite */
+init_sysent.c:	{ AS(aio_write_args), (sy_call_t *)sys_aio_write, AUE_NULL, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 256 = aio_write */
+init_sysent.c:	{ AS(pwritev_args), (sy_call_t *)sys_pwritev, AUE_PWRITEV, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 290 = pwritev */
+init_sysent.c:	{ compat6(AS(freebsd6_aio_write_args),aio_write), AUE_NULL, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 319 = freebsd6 aio_write */
+init_sysent.c:	{ AS(pwrite_args), (sy_call_t *)sys_pwrite, AUE_PWRITE, NULL, 0, 0, SYF_CAPENABLED, SY_THR_STATIC },	/* 476 = pwrite */
+kern_acct.c:	/* Write out the old value. */
+kern_acct.c:		flags = FWRITE | O_APPEND;
+kern_acct.c: * Write out process accounting information, on process exit.
+kern_acct.c:	 * Write the accounting information to the file.
+kern_acct.c:	ret = vn_rdwr(UIO_WRITE, acct_vp, (caddr_t)&acct, sizeof (acct),
+kern_alq.c:	int	aq_writehead;		/* Location for next write */
+kern_alq.c:	int	aq_writetail;		/* Flush starts at this location */
+kern_alq.c:#define	AQ_ORDERED	0x0010		/* Queue enforces ordered writes */
+kern_alq.c:#define	AQ_LEGACY	0x0020		/* Legacy queue (fixed length writes) */
+kern_alq.c:	/* Stop any new writers. */
+kern_alq.c:	vn_close(alq->aq_vp, FWRITE, alq->aq_cred,
+kern_alq.c:	/* Start the write from the location of our buffer tail pointer. */
+kern_alq.c:	aiov[0].iov_base = alq->aq_entbuf + alq->aq_writetail;
+kern_alq.c:	if (alq->aq_writetail < alq->aq_writehead) {
+kern_alq.c:		totlen = aiov[0].iov_len = alq->aq_writehead - alq->aq_writetail;
+kern_alq.c:	} else if (alq->aq_writehead == 0) {
+kern_alq.c:		totlen = aiov[0].iov_len = alq->aq_buflen - alq->aq_writetail -
+kern_alq.c:		 * - first is from writetail to end of buffer
+kern_alq.c:		 * - second is from start of buffer to writehead
+kern_alq.c:		aiov[0].iov_len = alq->aq_buflen - alq->aq_writetail -
+kern_alq.c:		aiov[1].iov_len =  alq->aq_writehead;
+kern_alq.c:	auio.uio_rw = UIO_WRITE;
+kern_alq.c:	 * Do all of the junk required to write now.
+kern_alq.c:	vn_start_write(vp, &mp, V_WAIT);
+kern_alq.c:	 * XXX: VOP_WRITE error checks are ignored.
+kern_alq.c:	if (mac_vnode_check_write(alq->aq_cred, NOCRED, vp) == 0)
+kern_alq.c:		VOP_WRITE(vp, &auio, IO_UNIT | IO_APPEND, alq->aq_cred);
+kern_alq.c:	vn_finished_write(mp);
+kern_alq.c:	/* Adjust writetail as required, taking into account wrapping. */
+kern_alq.c:	alq->aq_writetail = (alq->aq_writetail + totlen + wrapearly) %
+kern_alq.c:		alq->aq_writehead = alq->aq_writetail = 0;
+kern_alq.c:	KASSERT((alq->aq_writetail >= 0 && alq->aq_writetail < alq->aq_buflen),
+kern_alq.c:	    ("%s: aq_writetail < 0 || aq_writetail >= aq_buflen", __func__));
+kern_alq.c:	oflags = FWRITE | O_NOFOLLOW | O_CREAT;
+kern_alq.c:	alq->aq_writehead = alq->aq_writetail = 0;
+kern_alq.c:alq_writen(struct alq *alq, void *data, int len, int flags)
+kern_alq.c:	 * Fail to perform the write and return EWOULDBLOCK if:
+kern_alq.c:	 * If we want ordered writes and there is already at least one thread
+kern_alq.c:	 * If we need to wrap the buffer to accommodate the write,
+kern_alq.c:	if ((alq->aq_buflen - alq->aq_writehead) < len)
+kern_alq.c:		copy = alq->aq_buflen - alq->aq_writehead;
+kern_alq.c:	bcopy(data, alq->aq_entbuf + alq->aq_writehead, copy);
+kern_alq.c:	alq->aq_writehead += copy;
+kern_alq.c:	if (alq->aq_writehead >= alq->aq_buflen) {
+kern_alq.c:		KASSERT((alq->aq_writehead == alq->aq_buflen),
+kern_alq.c:		    ("%s: alq->aq_writehead (%d) > alq->aq_buflen (%d)",
+kern_alq.c:		    alq->aq_writehead,
+kern_alq.c:		alq->aq_writehead = 0;
+kern_alq.c:		 * to the start of the buffer and resetting aq_writehead.
+kern_alq.c:		alq->aq_writehead = len - copy;
+kern_alq.c:	KASSERT((alq->aq_writehead >= 0 && alq->aq_writehead < alq->aq_buflen),
+kern_alq.c:	    ("%s: aq_writehead < 0 || aq_writehead >= aq_buflen", __func__));
+kern_alq.c:alq_write(struct alq *alq, void *data, int flags)
+kern_alq.c:	    ("%s: fixed length write on variable length queue", __func__));
+kern_alq.c:	return (alq_writen(alq, data, alq->aq_entlen, flags));
+kern_alq.c: * Retrieve a pointer for the ALQ to write directly into, avoiding bcopy.
+kern_alq.c:	 * We ensure elsewhere that if aq_writehead == aq_writetail because
+kern_alq.c:	if (alq->aq_writehead <= alq->aq_writetail)
+kern_alq.c:		contigbytes = alq->aq_buflen - alq->aq_writehead;
+kern_alq.c:			 * contiguous write. Wrap early if there's space at
+kern_alq.c:			if (alq->aq_writetail >= len || flags & ALQ_WAITOK) {
+kern_alq.c:				    alq->aq_writetail;
+kern_alq.c:				alq->aq_writehead = 0;
+kern_alq.c:	 * If we want ordered writes and there is already at least one thread
+kern_alq.c:		if (alq->aq_writehead <= alq->aq_writetail)
+kern_alq.c:			contigbytes = alq->aq_buflen - alq->aq_writehead;
+kern_alq.c:	 * available in our buffer starting at aq_writehead.
+kern_alq.c:	alq->aq_getpost.ae_data = alq->aq_entbuf + alq->aq_writehead;
+kern_alq.c:		alq->aq_writehead += ale->ae_bytesused;
+kern_alq.c:		/* Wrap aq_writehead if we filled to the end of the buffer. */
+kern_alq.c:		if (alq->aq_writehead == alq->aq_buflen)
+kern_alq.c:			alq->aq_writehead = 0;
+kern_alq.c:		KASSERT((alq->aq_writehead >= 0 &&
+kern_alq.c:		    alq->aq_writehead < alq->aq_buflen),
+kern_alq.c:		    ("%s: aq_writehead < 0 || aq_writehead >= aq_buflen",
+kern_conf.c:#define dead_write	(d_write_t *)enxio
+kern_conf.c:	.d_write =	dead_write,
+kern_conf.c:#define no_write	(d_write_t *)enodev
+kern_conf.c:giant_write(struct cdev *dev, struct uio *uio, int ioflag)
+kern_conf.c:	retval = dsw->d_gianttrick->d_write(dev, uio, ioflag);
+kern_conf.c:		devsw->d_write = dead_write;
+kern_conf.c:	FIXUP(d_write,		no_write,	giant_write);
+kern_descrip.c:	seq_write_begin(&fde->fde_seq);
+kern_descrip.c:	seq_write_end(&fde->fde_seq);
+kern_descrip.c:			if ((fp->f_flag & FWRITE) == 0) {
+kern_descrip.c:		 * writes in sequential_heuristic().
+kern_descrip.c:	seq_write_begin(&newfde->fde_seq);
+kern_descrip.c:	seq_write_end(&newfde->fde_seq);
+kern_descrip.c:	seq_write_begin(&fde->fde_seq);
+kern_descrip.c:	seq_write_end(&fde->fde_seq);
+kern_descrip.c: * to generate error messages which write to a file which otherwise would
+kern_descrip.c:	 * FREAD and FWRITE failure return EBADF as per POSIX.
+kern_descrip.c:	case FWRITE:
+kern_descrip.c:		    ((fp->f_flag & FWRITE) != 0))
+kern_descrip.c:fget_write(struct thread *td, int fd, cap_rights_t *rightsp, struct file **fpp)
+kern_descrip.c:	return (_fget(td, fd, fpp, FWRITE, rightsp, NULL));
+kern_descrip.c:fgetvp_write(struct thread *td, int fd, cap_rights_t *rightsp,
+kern_descrip.c:	return (_fgetvp(td, fd, FWRITE, rightsp, vpp));
+kern_descrip.c:		if (((mode & (FREAD|FWRITE)) | fp->f_flag) != fp->f_flag) {
+kern_descrip.c:		seq_write_begin(&newfde->fde_seq);
+kern_descrip.c:		seq_write_end(&newfde->fde_seq);
+kern_descrip.c:		seq_write_begin(&newfde->fde_seq);
+kern_descrip.c:		seq_write_end(&newfde->fde_seq);
+kern_descrip.c:		{ FWRITE, KF_FLAG_WRITE },
+kern_descrip.c:		export_vnode_to_sb(tracevp, KF_FD_TYPE_TRACE, FREAD | FWRITE,
+kern_descrip.c:		export_vnode_to_sb(cttyvp, KF_FD_TYPE_CTTY, FREAD | FWRITE,
+kern_descrip.c:	okif->kf_flags = kif->kf_flags & (KF_FLAG_READ | KF_FLAG_WRITE |
+kern_descrip.c:badfo_readwrite(struct file *fp, struct uio *uio, struct ucred *active_cred,
+kern_descrip.c:	.fo_read = badfo_readwrite,
+kern_descrip.c:	.fo_write = badfo_readwrite,
+kern_dump.c:/* Handle buffered writes. */
+kern_dump.c:dumpsys_gen_write_aux_headers(struct dumperinfo *di)
+kern_dump.c:dumpsys_buf_write(struct dumperinfo *di, char *ptr, size_t sz)
+kern_dump.c:			error = dump_write(di, di->blockbuf, 0, dumplo,
+kern_dump.c:	error = dump_write(di, di->blockbuf, 0, dumplo, di->blocksize);
+kern_dump.c:		error = dump_write(di, va, 0, dumplo, sz);
+kern_dump.c:	error = dumpsys_buf_write(di, (char*)&phdr, sizeof(phdr));
+kern_dump.c:	error = dump_write_pad(di, &kdh, 0, dumplo, sizeof(kdh), &size);
+kern_dump.c:	error = dumpsys_buf_write(di, (char*)&ehdr, sizeof(ehdr));
+kern_dump.c:	error = dumpsys_write_aux_headers(di);
+kern_dump.c:	error = dump_write_pad(di, &kdh, 0, dumplo, sizeof(kdh), &size);
+kern_dump.c:	dump_write(di, NULL, 0, 0, 0);
+kern_event.c:	.fo_write = invfo_rdwr,
+kern_event.c:	{ &file_filtops, 1 },			/* EVFILT_WRITE */
+kern_event.c:	finit(fp, FREAD | FWRITE, DTYPE_KQUEUE, kq, &kqueueops);
+kern_event.c:		ktrgenio(uap->fd, UIO_WRITE, ktruioin, 0);
+kern_exec.c:	 * Set VV_TEXT now so no one can write to the executable while we're
+kern_exec.c:	int error, writecount;
+kern_exec.c:	 * Check number of open-for-writes on the file and deny execution
+kern_exec.c:	error = VOP_GET_WRITECOUNT(vp, &writecount);
+kern_exec.c:	if (writecount != 0)
+kern_fork.c:	 * p_limit is copy-on-write.  Bump its refcount.
+kern_gzio.c:static int	gz_write(struct gzio_stream *, void *, u_int, int);
+kern_gzio.c:	/* Write the gzip header to the output buffer. */
+kern_gzio.c:gzio_write(struct gzio_stream *s, void *data, u_int len)
+kern_gzio.c:	return (gz_write(s, data, len, Z_NO_FLUSH));
+kern_gzio.c:	return (gz_write(s, NULL, 0, Z_FINISH));
+kern_gzio.c:gz_write(struct gzio_stream *s, void *buf, u_int len, int zflag)
+kern_gzio.c:			 * buffer, write it out now.
+kern_intr.c:		 * TODO: write a generic wrapper to avoid people rolling 
+kern_jail.c:	/* Write the fetched parameters back to userspace. */
+kern_jail.c:	case PRIV_IPC_WRITE:
+kern_jail.c:		 * Allow jailed processes to write to sysctls marked as jail
+kern_jail.c:	case PRIV_SYSCTL_WRITEJAIL:
+kern_jail.c:	case PRIV_VFS_WRITE:
+kern_ktr.c:    "Maximum number of entries to write");
+kern_ktr.c:    "Number of items in the write buffer");
+kern_ktrace.c:static void ktr_writerequest(struct thread *td, struct ktr_request *req);
+kern_ktrace.c:			ktr_writerequest(td, queued_req);
+kern_ktrace.c:	ktr_writerequest(td, req);
+kern_ktrace.c:	uio->uio_rw = UIO_WRITE;
+kern_ktrace.c:		flags = FREAD | FWRITE | O_NOFOLLOW;
+kern_ktrace.c:			(void) vn_close(vp, FREAD|FWRITE, td->td_ucred, td);
+kern_ktrace.c:		(void) vn_close(vp, FWRITE, td->td_ucred, td);
+kern_ktrace.c:ktr_writerequest(struct thread *td, struct ktr_request *req)
+kern_ktrace.c:	 * disabled on the process as we write out the request.
+kern_ktrace.c:	 * XXXRW: This is not ideal: we could end up performing a write after
+kern_ktrace.c:		KASSERT(cred == NULL, ("ktr_writerequest: cred != NULL"));
+kern_ktrace.c:	KASSERT(cred != NULL, ("ktr_writerequest: cred == NULL"));
+kern_ktrace.c:	auio.uio_rw = UIO_WRITE;
+kern_ktrace.c:		KASSERT(req->ktr_buffer != NULL, ("ktrace: nothing to write"));
+kern_ktrace.c:	vn_start_write(vp, &mp, V_WAIT);
+kern_ktrace.c:	error = mac_vnode_check_write(cred, NOCRED, vp);
+kern_ktrace.c:		error = VOP_WRITE(vp, &auio, IO_UNIT | IO_APPEND, cred);
+kern_ktrace.c:	vn_finished_write(mp);
+kern_ktrace.c:	log(LOG_NOTICE, "ktrace write failed, errno %d, tracing stopped\n",
+kern_lock.c:			 * (for the writer starvation avoidance technique).
+kern_lock.c:					    "%s: %p claimed by a new writer",
+kern_physio.c:		prot |= VM_PROT_WRITE;	/* Less backwards than it looks */
+kern_physio.c:				racct_add_force(curproc, RACCT_WRITEBPS,
+kern_physio.c:				racct_add_force(curproc, RACCT_WRITEIOPS, 1);
+kern_physio.c:				bp->bio_cmd = BIO_WRITE;
+kern_priv.c:	 * Writes to kernel/physical memory are a typical root-only operation,
+kern_proc.c: * target process locked.  If 'preferthread' is set, overwrite certain
+kern_proc.c:		if (entry->protection & VM_PROT_WRITE)
+kern_proc.c:			kve->kve_protection |= KVME_PROT_WRITE;
+kern_proc.c:		if (entry->protection & VM_PROT_WRITE)
+kern_proc.c:			kve->kve_protection |= KVME_PROT_WRITE;
+kern_racct.c:	[RACCT_WRITEBPS] =
+kern_racct.c:	[RACCT_WRITEIOPS] =
+kern_racct.c:racct_add_buf(struct proc *p, const struct buf *bp, int is_write)
+kern_racct.c:	SDT_PROBE3(racct, , rusage, add__buf, p, bp, is_write);
+kern_racct.c:	if (is_write) {
+kern_racct.c:		racct_add_locked(curproc, RACCT_WRITEBPS, bp->b_bcount, 1);
+kern_racct.c:		racct_add_locked(curproc, RACCT_WRITEIOPS, 1, 1);
+kern_racct.c:	rctl_throttle_decay(racct, RACCT_WRITEBPS);
+kern_racct.c:	rctl_throttle_decay(racct, RACCT_WRITEIOPS);
+kern_racct.c:			rctl_throttle_decay(p->p_racct, RACCT_WRITEBPS);
+kern_racct.c:			rctl_throttle_decay(p->p_racct, RACCT_WRITEIOPS);
+kern_rangelock.c:			/* Reads must not overlap with granted writes. */
+kern_rangelock.c:			/* Write must not overlap with any granted locks. */
+kern_rangelock.c:			/* Move grantable write locks to the front. */
+kern_rangelock.c:	return (rangelock_enqueue(lock, start, end, RL_LOCK_WRITE, ilk));
+kern_rctl.c:	{ "writebps", RACCT_WRITEBPS },
+kern_rctl.c:	{ "writeiops", RACCT_WRITEIOPS },
+kern_rctl.c: * Routine used by RCTL syscalls to write out output string.
+kern_rctl.c:rctl_write_outbuf(struct sbuf *outputsbuf, char *outbufp, size_t outbuflen)
+kern_rctl.c:	error = rctl_write_outbuf(outputsbuf, uap->outbufp, uap->outbuflen);
+kern_rctl.c:	error = rctl_write_outbuf(sb, uap->outbufp, uap->outbuflen);
+kern_rctl.c:	error = rctl_write_outbuf(sb, uap->outbufp, uap->outbuflen);
+kern_rctl.c:	 * Set default values, making sure not to overwrite the ones
+kern_resource.c: * We share these structures copy-on-write after fork.
+kern_rmlock.c: * Machine independent bits of reader/writer lock implementation.
+kern_rmlock.c:	rm->rm_writecpus = all_cpus;
+kern_rmlock.c:	if (!CPU_ISSET(pc->pc_cpuid, &rm->rm_writecpus)) {
+kern_rmlock.c:	 * We allow readers to acquire a lock even if a writer is blocked if
+kern_rmlock.c:	CPU_CLR(pc->pc_cpuid, &rm->rm_writecpus);
+kern_rmlock.c:	    CPU_ISSET(pc->pc_cpuid, &rm->rm_writecpus)))
+kern_rmlock.c:	if (CPU_CMP(&rm->rm_writecpus, &all_cpus)) {
+kern_rmlock.c:		CPU_NAND(&readcpus, &rm->rm_writecpus);
+kern_rmlock.c:		rm->rm_writecpus = all_cpus;
+kern_rmlock.c:		 * Assumes rm->rm_writecpus update is visible on other CPUs
+kern_rmlock.c:		 * Handle the write-locked case.  Unlike other
+kern_rmlock.c:		 * primitives, writers can never recurse.
+kern_rmlock.c:	db_printf(" writecpus: ");
+kern_rmlock.c:	ddb_display_cpuset(__DEQUALIFY(const cpuset_t *, &rm->rm_writecpus));
+kern_rmlock.c:	db_printf("Backing write-lock (%s):\n", lc->lc_name);
+kern_rwlock.c: * Machine independent bits of reader/writer lock implementation.
+kern_rwlock.c: * Return a pointer to the owning thread if the lock is write-locked or
+kern_rwlock.c: * Returns if a write owner is recursed.  Write ownership is not assured
+kern_rwlock.c:	if (!_rw_write_lock_fetch(rw, &v, tid))
+kern_rwlock.c:		    0, 0, file, line, LOCKSTAT_WRITER);
+kern_rwlock.c:			atomic_set_ptr(&rw->rw_lock, RW_LOCK_WRITER_RECURSED);
+kern_rwlock.c:			    rw, 0, 0, file, line, LOCKSTAT_WRITER);
+kern_rwlock.c: * is unlocked and has no writer waiters or spinners.  Failing otherwise
+kern_rwlock.c: * prioritizes writers before readers.
+kern_rwlock.c:    (RW_LOCK_READ | RW_LOCK_WRITE_WAITERS | RW_LOCK_WRITE_SPINNER)) ==	\
+kern_rwlock.c:	 * Handle the easy case.  If no other thread has a write
+kern_rwlock.c:	 * RW_LOCK_WRITE_WAITERS flag.  If we fail to acquire a
+kern_rwlock.c:		 * has a write lock or there are write waiters present,
+kern_rwlock.c:		 * The lock is held in write mode or it already has waiters.
+kern_rwlock.c:		 * If there aren't any waiters for a write lock, then try
+kern_rwlock.c:			MPASS((*vp & ~RW_LOCK_WRITE_SPINNER) ==
+kern_rwlock.c:		v = rw->rw_lock & (RW_LOCK_WAITERS | RW_LOCK_WRITE_SPINNER);
+kern_rwlock.c:		 * priority thread blocks on the write lock before the
+kern_rwlock.c:		if (v & RW_LOCK_WRITE_WAITERS) {
+kern_rwlock.c:		 * free anymore, but in that case the writers will just
+kern_rwlock.c: * This function is called when we are unable to obtain a write lock on the
+kern_rwlock.c: * read or write lock.
+kern_rwlock.c:		atomic_set_ptr(&rw->rw_lock, RW_LOCK_WRITER_RECURSED);
+kern_rwlock.c:			if (_rw_write_lock_fetch(rw, &v, tid))
+kern_rwlock.c:		 * If the lock is write locked and the owner is
+kern_rwlock.c:			if (!(v & RW_LOCK_WRITE_SPINNER)) {
+kern_rwlock.c:				    v | RW_LOCK_WRITE_SPINNER)) {
+kern_rwlock.c:				if ((rw->rw_lock & RW_LOCK_WRITE_SPINNER) == 0)
+kern_rwlock.c:		x = v & (RW_LOCK_WAITERS | RW_LOCK_WRITE_SPINNER);
+kern_rwlock.c:			x &= ~RW_LOCK_WRITE_SPINNER;
+kern_rwlock.c:		 * If the RW_LOCK_WRITE_WAITERS flag isn't set, then try to
+kern_rwlock.c:		if (!(v & RW_LOCK_WRITE_WAITERS)) {
+kern_rwlock.c:			    v | RW_LOCK_WRITE_WAITERS)) {
+kern_rwlock.c:				CTR2(KTR_LOCK, "%s: %p set write waiters flag",
+kern_rwlock.c:		 * We were unable to acquire the lock and the write waiters
+kern_rwlock.c:		    LOCKSTAT_WRITER, (state & RW_LOCK_READ) == 0,
+kern_rwlock.c:		    LOCKSTAT_WRITER, (state & RW_LOCK_READ) == 0,
+kern_rwlock.c:	    waittime, file, line, LOCKSTAT_WRITER);
+kern_rwlock.c: * a write lock failed.  The latter means that the lock is recursed or one of
+kern_rwlock.c:	if (v & RW_LOCK_WRITER_RECURSED) {
+kern_rwlock.c:			atomic_clear_ptr(&rw->rw_lock, RW_LOCK_WRITER_RECURSED);
+kern_rwlock.c:	LOCKSTAT_PROFILE_RELEASE_RWLOCK(rw__release, rw, LOCKSTAT_WRITER);
+kern_rwlock.c:	if (v == tid && _rw_write_unlock(rw, tid))
+kern_rwlock.c:	KASSERT(rw->rw_lock & (RW_LOCK_READ_WAITERS | RW_LOCK_WRITE_WAITERS),
+kern_rwlock.c:	 * waiters if we have any over writers.  This is probably not ideal.
+kern_rwlock.c:	 * 'v' is the value we are going to write back to rw_lock.  If we
+kern_rwlock.c:	 * In the case of both readers and writers waiting we wakeup the
+kern_rwlock.c:	 * readers but leave the RW_LOCK_WRITE_WAITERS flag set.  If a
+kern_rwlock.c:	 * new writer comes in before a reader it will claim the lock up
+kern_rwlock.c:	if (rw->rw_lock & RW_LOCK_WRITE_WAITERS) {
+kern_rwlock.c:		    queue == TS_SHARED_QUEUE ? "read" : "write");
+kern_rwlock.c: * Attempt to do a non-blocking upgrade from a read lock to a write
+kern_rwlock.c:	 * Attempt to switch from one reader to a writer.  If there
+kern_rwlock.c:	 * are any write waiters, then we will have to lock the
+kern_rwlock.c:	 * turnstile first to prevent races with another writer
+kern_rwlock.c:		 * Try to switch from one reader to a writer again.  This time
+kern_rwlock.c: * Downgrade a write lock into a single read lock.
+kern_rwlock.c:	 * Convert from a writer to a single reader.  First we handle
+kern_rwlock.c:	wwait = v & RW_LOCK_WRITE_WAITERS;
+kern_rwlock.c:	 * Downgrade from a write lock while preserving waiters flag
+kern_rwlock.c:	 * Wake other readers if there are no writers pending.  Otherwise they
+kern_rwlock.c:		 * If some other thread has a write lock or we have one
+kern_rwlock.c:		 * If we hold a write lock fail.  We can't reliably check
+kern_rwlock.c:	switch (rw->rw_lock & (RW_LOCK_READ_WAITERS | RW_LOCK_WRITE_WAITERS)) {
+kern_rwlock.c:	case RW_LOCK_WRITE_WAITERS:
+kern_rwlock.c:		db_printf("writers\n");
+kern_rwlock.c:	case RW_LOCK_READ_WAITERS | RW_LOCK_WRITE_WAITERS:
+kern_rwlock.c:		db_printf("readers and writers\n");
+kern_sendfile.c:	 * Protect against multiple writers to the socket.
+kern_sendfile.c:			hdr_uio->uio_rw = UIO_WRITE;
+kern_sendfile.c:	 * Send trailers. Wimp out and use writev(2).
+kern_sendfile.c:		error = kern_writev(td, sockfd, trl_uio);
+kern_sendfile.c:	 * because it may have been set by writev.
+kern_sendfile.c: * specified, write the total number of bytes sent into *sbytes.
+kern_sharedpage.c:shared_page_write(int base, int size, const void *data)
+kern_sharedpage.c:		shared_page_write(res, size, data);
+kern_sharedpage.c:	shared_page_write(tk_base + offsetof(struct vdso_timekeep, tk_ver),
+kern_sharedpage.c:	shared_page_write(tk_base + offsetof(struct vdso_timekeep32,
+kern_shutdown.c: * before the write cache on your hard disk has been flushed, leading to
+kern_shutdown.c:    &poweroff_delay, 0, "Delay before poweroff to write disk caches (msec)");
+kern_shutdown.c:dump_write(struct dumperinfo *di, void *virtual, vm_offset_t physical,
+kern_shutdown.c:		printf("Attempt to write outside dump device boundaries.\n"
+kern_shutdown.c:dump_write_pad(struct dumperinfo *di, void *virtual, vm_offset_t physical,
+kern_shutdown.c:	ret = dump_write(di, temp, physical, offset, *size);
+kern_sig.c:	 * writes to broken pipes and sockets.
+kern_sig.c:		 * XXX : Todo, as well as euid, write out ruid too
+kern_sig.c:			flags = O_CREAT | O_EXCL | FWRITE | O_NOFOLLOW;
+kern_sig.c:	flags = O_CREAT | FWRITE | O_NOFOLLOW;
+kern_sig.c:	/* Postpone other writers, including core dumps of other processes. */
+kern_sig.c:	error1 = vn_close(vp, FWRITE, cred, td);
+kern_sx.c:		    0, 0, file, line, LOCKSTAT_WRITER);
+kern_sx.c:			    sx, 0, 0, file, line, LOCKSTAT_WRITER);
+kern_sx.c:		 * If the lock is write locked and the owner is
+kern_sx.c:				CTR2(KTR_LOCK, "%s: %p claimed by new writer",
+kern_sx.c:		    LOCKSTAT_WRITER, (state & SX_LOCK_SHARED) == 0,
+kern_sx.c:		    LOCKSTAT_WRITER, (state & SX_LOCK_SHARED) == 0,
+kern_sx.c:		    contested, waittime, file, line, LOCKSTAT_WRITER);
+kern_sx.c:	LOCKSTAT_PROFILE_RELEASE_RWLOCK(sx__release, sx, LOCKSTAT_WRITER);
+kern_sysctl.c:	 * write operations to the user page can sleep.
+kern_sysctl.c:			priv = PRIV_SYSCTL_WRITEJAIL;
+kern_sysctl.c:			priv = PRIV_SYSCTL_WRITEJAIL;
+kern_sysctl.c:			priv = PRIV_SYSCTL_WRITE;
+kern_sysctl.c:		if (!useracc(old, req.oldlen, VM_PROT_WRITE))
+kern_tc.c:	 * not overwrite the generation or next pointer.  While we
+kern_tc.c:		/* Overwrite timestamps if feedback clock selected. */
+kern_time.c:	    !useracc(ua_rmtp, sizeof(rmt), VM_PROT_WRITE))
+kern_umtx.c:	 * or umtx_lock, write must have both chain lock and
+kern_umtx.c:		if (vm_map_lookup(&map, (vm_offset_t)addr, VM_PROT_WRITE,
+kern_umtx.c:	wrflags = URWLOCK_WRITE_OWNER;
+kern_umtx.c:		wrflags |= URWLOCK_WRITE_WAITERS;
+kern_umtx.c:	int32_t blocked_writers;
+kern_umtx.c:		while (!(state & URWLOCK_WRITE_OWNER) && URWLOCK_READER_COUNT(state) == 0) {
+kern_umtx.c:			    &oldstate, state | URWLOCK_WRITE_OWNER);
+kern_umtx.c:			if (!(state & (URWLOCK_WRITE_OWNER|URWLOCK_WRITE_WAITERS)) &&
+kern_umtx.c:		while (error == 0 && ((state & URWLOCK_WRITE_OWNER) ||
+kern_umtx.c:		    (state & URWLOCK_WRITE_WAITERS) == 0) {
+kern_umtx.c:			    &oldstate, state | URWLOCK_WRITE_WAITERS);
+kern_umtx.c:		if (!(state & URWLOCK_WRITE_OWNER) && URWLOCK_READER_COUNT(state) == 0) {
+kern_umtx.c:		rv = fueword32(&rwlock->rw_blocked_writers,
+kern_umtx.c:		    &blocked_writers);
+kern_umtx.c:		suword32(&rwlock->rw_blocked_writers, blocked_writers+1);
+kern_umtx.c:		while ((state & URWLOCK_WRITE_OWNER) || URWLOCK_READER_COUNT(state) != 0) {
+kern_umtx.c:		rv = fueword32(&rwlock->rw_blocked_writers,
+kern_umtx.c:		    &blocked_writers);
+kern_umtx.c:		suword32(&rwlock->rw_blocked_writers, blocked_writers-1);
+kern_umtx.c:		if (blocked_writers == 1) {
+kern_umtx.c:				    &oldstate, state & ~URWLOCK_WRITE_WAITERS);
+kern_umtx.c:				 * We are leaving the URWLOCK_WRITE_WAITERS
+kern_umtx.c:	if (state & URWLOCK_WRITE_OWNER) {
+kern_umtx.c:			    &oldstate, state & ~URWLOCK_WRITE_OWNER);
+kern_umtx.c:				if (!(oldstate & URWLOCK_WRITE_OWNER)) {
+kern_umtx.c:		if (state & URWLOCK_WRITE_WAITERS) {
+kern_umtx.c:		} else if (state & URWLOCK_WRITE_WAITERS) {
+subr_acl_nfs4.c:		    {VWRITE, ACL_WRITE_DATA},
+subr_acl_nfs4.c:		    {VWRITE_NAMED_ATTRS, ACL_WRITE_NAMED_ATTRS},
+subr_acl_nfs4.c:		    {VWRITE_ATTRIBUTES, ACL_WRITE_ATTRIBUTES},
+subr_acl_nfs4.c:		    {VWRITE_ACL, ACL_WRITE_ACL},
+subr_acl_nfs4.c:		    {VWRITE_OWNER, ACL_WRITE_OWNER},
+subr_acl_nfs4.c:	 * VAPPEND is just a modifier for VWRITE; if the caller asked
+subr_acl_nfs4.c:	 * for 'VAPPEND | VWRITE', we want to check for ACL_APPEND_DATA only.
+subr_acl_nfs4.c:		access_mask &= ~ACL_WRITE_DATA;
+subr_acl_nfs4.c:	KASSERT((accmode & ~(VEXEC | VWRITE | VREAD | VADMIN | VAPPEND |
+subr_acl_nfs4.c:	    VEXPLICIT_DENY | VREAD_NAMED_ATTRS | VWRITE_NAMED_ATTRS |
+subr_acl_nfs4.c:	    VDELETE_CHILD | VREAD_ATTRIBUTES | VWRITE_ATTRIBUTES | VDELETE |
+subr_acl_nfs4.c:	    VREAD_ACL | VWRITE_ACL | VWRITE_OWNER | VSYNCHRONIZE)) == 0,
+subr_acl_nfs4.c:	KASSERT((accmode & VAPPEND) == 0 || (accmode & VWRITE),
+subr_acl_nfs4.c:	    	("VAPPEND without VWRITE"));
+subr_acl_nfs4.c:	 * File owner is always allowed to read and write the ACL
+subr_acl_nfs4.c:		access_mask &= ~(ACL_READ_ACL | ACL_WRITE_ACL |
+subr_acl_nfs4.c:		    ACL_READ_ATTRIBUTES | ACL_WRITE_ATTRIBUTES);
+subr_acl_nfs4.c:	 * Ignore append permission for regular files; use write
+subr_acl_nfs4.c:		access_mask |= ACL_WRITE_DATA;
+subr_acl_nfs4.c:	if ((accmode & (VWRITE | VAPPEND | VDELETE_CHILD)) &&
+subr_acl_nfs4.c:	    !priv_check_cred(cred, PRIV_VFS_WRITE, 0))
+subr_acl_nfs4.c:		priv_granted |= (VWRITE | VAPPEND | VDELETE_CHILD);
+subr_acl_nfs4.c:	const int WRITE = 02;
+subr_acl_nfs4.c:		 *      ACL_READ_DATA, ACL_WRITE_DATA, ACL_APPEND_DATA
+subr_acl_nfs4.c:			entry->ae_perm &= ~(ACL_READ_DATA | ACL_WRITE_DATA |
+subr_acl_nfs4.c:			 *          ACL_WRITE_DATA, ACL_APPEND_DATA, ACL_EXECUTE
+subr_acl_nfs4.c:			    ACL_WRITE_DATA | ACL_APPEND_DATA | ACL_EXECUTE))
+subr_acl_nfs4.c:		 *        to disallow ACL_READ_DATA, ACL_WRITE_DATA,
+subr_acl_nfs4.c:		if (entry->ae_perm & ACL_WRITE_DATA) {
+subr_acl_nfs4.c:			if (amode & WRITE)
+subr_acl_nfs4.c:				previous->ae_perm &= ~ACL_WRITE_DATA;
+subr_acl_nfs4.c:				previous->ae_perm |= ACL_WRITE_DATA;
+subr_acl_nfs4.c:			if (amode & WRITE)
+subr_acl_nfs4.c:				if (extramode & WRITE) {
+subr_acl_nfs4.c:					    ~(ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:					    ~(ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		if (!_acl_entry_matches(a2, ACL_USER_OBJ, ACL_WRITE_ACL |
+subr_acl_nfs4.c:		    ACL_WRITE_OWNER | ACL_WRITE_ATTRIBUTES |
+subr_acl_nfs4.c:		    ACL_WRITE_NAMED_ATTRS, ACL_ENTRY_TYPE_ALLOW))
+subr_acl_nfs4.c:		if (!_acl_entry_matches(a5, ACL_EVERYONE, ACL_WRITE_ACL |
+subr_acl_nfs4.c:		    ACL_WRITE_OWNER | ACL_WRITE_ATTRIBUTES |
+subr_acl_nfs4.c:		    ACL_WRITE_NAMED_ATTRS, ACL_ENTRY_TYPE_DENY))
+subr_acl_nfs4.c:		a2 = _acl_append(aclp, ACL_USER_OBJ, ACL_WRITE_ACL |
+subr_acl_nfs4.c:		    ACL_WRITE_OWNER | ACL_WRITE_ATTRIBUTES |
+subr_acl_nfs4.c:		    ACL_WRITE_NAMED_ATTRS, ACL_ENTRY_TYPE_ALLOW);
+subr_acl_nfs4.c:		a5 = _acl_append(aclp, ACL_EVERYONE, ACL_WRITE_ACL |
+subr_acl_nfs4.c:		    ACL_WRITE_OWNER | ACL_WRITE_ATTRIBUTES |
+subr_acl_nfs4.c:		    ACL_WRITE_NAMED_ATTRS, ACL_ENTRY_TYPE_DENY);
+subr_acl_nfs4.c:		a2->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		a1->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		a4->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		a3->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		a6->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		a5->ae_perm |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:			if ((entry->ae_perm & ACL_WRITE_DATA) &&
+subr_acl_nfs4.c:			if ((entry->ae_perm & ACL_WRITE_DATA) &&
+subr_acl_nfs4.c:			if (entry->ae_perm & ACL_WRITE_DATA) {
+subr_acl_nfs4.c:			entry->ae_perm &= ~(ACL_WRITE_ACL | ACL_WRITE_OWNER);
+subr_acl_nfs4.c:		 *      mask bits: ACL_WRITE_ACL, ACL_WRITE_OWNER.
+subr_acl_nfs4.c:			copy->ae_perm &= ~(ACL_WRITE_ACL | ACL_WRITE_OWNER);
+subr_acl_nfs4.c:			entry->ae_perm &= ~(ACL_WRITE_ACL | ACL_WRITE_OWNER |
+subr_acl_nfs4.c:			    ACL_WRITE_NAMED_ATTRS | ACL_WRITE_ATTRIBUTES);
+subr_acl_nfs4.c:				    ~(ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:	user_allow |= ACL_WRITE_ACL | ACL_WRITE_OWNER | ACL_WRITE_ATTRIBUTES |
+subr_acl_nfs4.c:	    ACL_WRITE_NAMED_ATTRS;
+subr_acl_nfs4.c:		user_allow |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		group_allow |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_nfs4.c:		everyone_allow |= (ACL_WRITE_DATA | ACL_APPEND_DATA);
+subr_acl_posix1e.c:	KASSERT((accmode & ~(VEXEC | VWRITE | VREAD | VADMIN | VAPPEND)) == 0,
+subr_acl_posix1e.c:	KASSERT((accmode & VAPPEND) == 0 || (accmode & VWRITE),
+subr_acl_posix1e.c:	    	("VAPPEND without VWRITE"));
+subr_acl_posix1e.c:	if (((accmode & VWRITE) || (accmode & VAPPEND)) &&
+subr_acl_posix1e.c:	    !priv_check_cred(cred, PRIV_VFS_WRITE, 0))
+subr_acl_posix1e.c:		priv_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:			if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:				dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:		if (acl_mask->ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:			acl_mask_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:		acl_mask_granted = VEXEC | VREAD | VWRITE | VAPPEND;
+subr_acl_posix1e.c:			if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:				dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:			if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:				dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:			if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:				dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:				if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:					dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:				if (acl->acl_entry[i].ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:					dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:	if (acl_other->ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:		dac_granted |= (VWRITE | VAPPEND);
+subr_acl_posix1e.c:			perm |= ACL_WRITE;
+subr_acl_posix1e.c:			perm |= ACL_WRITE;
+subr_acl_posix1e.c:			perm |= ACL_WRITE;
+subr_acl_posix1e.c:	if (acl_user_obj_entry->ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:	if (acl_group_obj_entry->ae_perm & ACL_WRITE)
+subr_acl_posix1e.c:	if (acl_other_entry->ae_perm & ACL_WRITE)
+subr_bus.c: * @brief Stub function for implementing BUS_WRITE_IVAR().
+subr_bus.c:bus_generic_write_ivar(device_t dev, device_t child, int index,
+subr_bus.c:	KOBJMETHOD(bus_write_ivar,	bus_generic_write_ivar),
+subr_counter.c:	 * Any write attempt to a counter zeroes it.
+subr_counter.c:	 * Any write attempt to a counter zeroes it.
+subr_devmap.c:		    VM_PROT_READ | VM_PROT_WRITE, VM_MEMATTR_DEVICE);
+subr_devmap.c:		    VM_PROT_READ | VM_PROT_WRITE, PTE_DEVICE);
+subr_devstat.c:	else if (bp->bio_cmd == BIO_WRITE)
+subr_devstat.c:		flg = DEVSTAT_WRITE;
+subr_devstat.c:	 * XXX guarantees us proper write barriers.  I don't believe the
+subr_disk.c:	case BIO_WRITE:		printf("cmd=write "); break;
+subr_msgbuf.c:/* Read/write sequence numbers are modulo a multiple of the buffer size. */
+subr_msgbuf.c:	 * Starting write sequence number.
+subr_msgbuf.c:	 * Update the write sequence number for the actual number of
+subr_prf.c:	/* Write any buffered console/log output: */
+subr_prf.c: * Log writes to the log buffer, and guarantees not to sleep (so can be
+subr_prf.c: * log yet, it writes to the console also.
+subr_prf.c:	 * individual console write came in that was not terminated with a
+subr_prf.c:	 * A number of programs and rc scripts write a line feed, or a period
+subr_prof.c: * lose profile ticks when the next tick overwrites this one, but in this
+subr_rtc.c: * Write system time back to RTC
+subr_sleepqueue.c:		 * give up and report ENOMEM. We also cannot write to sb
+subr_uio.c:	uio.uio_rw = UIO_WRITE;
+subr_uio.c:	KASSERT(uio->uio_rw == UIO_READ || uio->uio_rw == UIO_WRITE,
+subr_uio.c:	    VM_PROT_WRITE, VM_PROT_ALL, MAP_PRIVATE | MAP_ANON, NULL, 0,
+sys_capability.c:		maxprot |= VM_PROT_WRITE;
+sys_generic.c: * Assert that the return value of read(2) and write(2) syscalls fits
+sys_generic.c:static int	dofilewrite(struct thread *, int, struct file *, struct uio *,
+sys_generic.c:	struct selfd		*st_free2;	/* (k) free fd for write set. */
+sys_generic.c:struct write_args {
+sys_generic.c:sys_write(td, uap)
+sys_generic.c:	struct write_args *uap;
+sys_generic.c:	error = kern_writev(td, uap->fd, &auio);
+sys_generic.c: * Positioned write system call.
+sys_generic.c:struct pwrite_args {
+sys_generic.c:sys_pwrite(struct thread *td, struct pwrite_args *uap)
+sys_generic.c:	return (kern_pwrite(td, uap->fd, uap->buf, uap->nbyte, uap->offset));
+sys_generic.c:kern_pwrite(struct thread *td, int fd, const void *buf, size_t nbyte,
+sys_generic.c:	error = kern_pwritev(td, fd, &auio, offset);
+sys_generic.c:freebsd6_pwrite(struct thread *td, struct freebsd6_pwrite_args *uap)
+sys_generic.c:	return (kern_pwrite(td, uap->fd, uap->buf, uap->nbyte, uap->offset));
+sys_generic.c: * Gather write system call.
+sys_generic.c:struct writev_args {
+sys_generic.c:sys_writev(struct thread *td, struct writev_args *uap)
+sys_generic.c:	error = kern_writev(td, uap->fd, auio);
+sys_generic.c:kern_writev(struct thread *td, int fd, struct uio *auio)
+sys_generic.c:	error = fget_write(td, fd, cap_rights_init(&rights, CAP_WRITE), &fp);
+sys_generic.c:	error = dofilewrite(td, fd, fp, auio, (off_t)-1, 0);
+sys_generic.c: * Gather positioned write system call.
+sys_generic.c:struct pwritev_args {
+sys_generic.c:sys_pwritev(struct thread *td, struct pwritev_args *uap)
+sys_generic.c:	error = kern_pwritev(td, uap->fd, auio, uap->offset);
+sys_generic.c:kern_pwritev(td, fd, auio, offset)
+sys_generic.c:	error = fget_write(td, fd, cap_rights_init(&rights, CAP_PWRITE), &fp);
+sys_generic.c:		error = dofilewrite(td, fd, fp, auio, offset, FOF_OFFSET);
+sys_generic.c: * Common code for writev and pwritev that writes data to
+sys_generic.c:dofilewrite(td, fd, fp, auio, offset, flags)
+sys_generic.c:	auio->uio_rw = UIO_WRITE;
+sys_generic.c:		bwillwrite();
+sys_generic.c:	if ((error = fo_write(fp, auio, td->td_ucred, flags, td))) {
+sys_generic.c:		ktrgenio(fd, UIO_WRITE, ktruio, error);
+sys_generic.c: * Can't use fget_write() here, since must return EINVAL and not EBADF if the
+sys_generic.c:	if (!(fp->f_flag & FWRITE)) {
+sys_generic.c:	if ((fp->f_flag & (FREAD | FWRITE)) == 0) {
+sys_generic.c:	 * Return true for read/write.  If the user asked for something
+sys_generic.c: * have two select sets, one for read and another for write.
+sys_pipe.c: * This code has two modes of operation, a small write mode and a large
+sys_pipe.c: * write mode.  The small write mode acts like conventional pipes with
+sys_pipe.c:static fo_rdwr_t	pipe_write;
+sys_pipe.c:	.fo_write = pipe_write,
+sys_pipe.c:static int	filt_pipewrite(struct knote *kn, long hint);
+sys_pipe.c:	.f_event = filt_pipewrite
+sys_pipe.c:static int pipe_build_write_buffer(struct pipe *wpipe, struct uio *uio);
+sys_pipe.c:static void pipe_destroy_write_buffer(struct pipe *wpipe);
+sys_pipe.c:static int pipe_direct_write(struct pipe *wpipe, struct uio *uio);
+sys_pipe.c:static void pipe_clone_write_buffer(struct pipe *wpipe);
+sys_pipe.c:	fflags = FREAD | FWRITE;
+sys_pipe.c:	 * side while we are blocked trying to allocate the write side.
+sys_pipe.c:		("pipespace: resize of direct writes not allowed"));
+sys_pipe.c:			 * If the "write-side" has been blocked, wake it up now.
+sys_pipe.c:		 * Handle write blocking hysteresis.
+sys_pipe.c: * This is similar to a physical write operation.
+sys_pipe.c:pipe_build_write_buffer(wpipe, uio)
+sys_pipe.c:		("Clone attempt on non-direct write pipe!"));
+sys_pipe.c:pipe_destroy_write_buffer(wpipe)
+sys_pipe.c:pipe_clone_write_buffer(wpipe)
+sys_pipe.c:	pipe_destroy_write_buffer(wpipe);
+sys_pipe.c: * This implements the pipe buffer write mechanism.  Note that only
+sys_pipe.c: * a direct write OR a normal pipe write can be pending at any given time.
+sys_pipe.c: * If there are any characters in the pipe buffer, the direct write will
+sys_pipe.c: * the pipe buffer.  Then the direct mapping write is set-up.
+sys_pipe.c:pipe_direct_write(wpipe, uio)
+sys_pipe.c:	error = pipe_build_write_buffer(wpipe, uio);
+sys_pipe.c:			pipe_destroy_write_buffer(wpipe);
+sys_pipe.c:		pipe_clone_write_buffer(wpipe);
+sys_pipe.c:		pipe_destroy_write_buffer(wpipe);
+sys_pipe.c:pipe_write(fp, uio, active_cred, flags, td)
+sys_pipe.c:	error = mac_pipe_check_write(active_cred, wpipe->pipe_pair);
+sys_pipe.c:		 * If the write is non-blocking, we don't use the
+sys_pipe.c:		 * direct write mechanism.
+sys_pipe.c:		 * The direct write mechanism will detect the reader going
+sys_pipe.c:			error = pipe_direct_write(wpipe, uio);
+sys_pipe.c:		 * Pipe buffered writes cannot be coincidental with
+sys_pipe.c:		 * direct writes.  We wait until the currently executing
+sys_pipe.c:		 * direct write is completed before we start filling the
+sys_pipe.c:		/* Writes of size <= PIPE_BUF must be atomic. */
+sys_pipe.c:				 * support atomic writes.  Wraparound
+sys_pipe.c:	if (fp->f_flag & FWRITE && events & (POLLOUT | POLLWRNORM))
+sys_pipe.c:		if (fp->f_flag & FWRITE && events & (POLLOUT | POLLWRNORM)) {
+sys_pipe.c:	if ((kn->kn_filter == EVFILT_WRITE) && !(fp->f_flag & FWRITE)) {
+sys_pipe.c:	case EVFILT_WRITE:
+sys_pipe.c:filt_pipewrite(struct knote *kn, long hint)
+sys_procdesc.c:	.fo_write = invfo_rdwr,
+sys_procdesc.c:	finit(fp, FREAD | FWRITE, DTYPE_PROCDESC, pdp, &procdesc_ops);
+sys_process.c: * proc_write_regs(proc, regs)
+sys_process.c: *	The process is stopped at the time write_regs is called.
+sys_process.c: * proc_read_fpregs, proc_write_fpregs
+sys_process.c: * proc_read_dbregs, proc_write_dbregs
+sys_process.c:proc_write_regs(struct thread *td, struct reg *regs)
+sys_process.c:proc_write_dbregs(struct thread *td, struct dbreg *dbregs)
+sys_process.c:proc_write_fpregs(struct thread *td, struct fpreg *fpregs)
+sys_process.c:proc_write_regs32(struct thread *td, struct reg32 *regs32)
+sys_process.c:proc_write_dbregs32(struct thread *td, struct dbreg32 *dbregs32)
+sys_process.c:proc_write_fpregs32(struct thread *td, struct fpreg32 *fpregs32)
+sys_process.c:	 * copy of each page.  Since these copies will not be writeable by the
+sys_process.c:	writing = uio->uio_rw == UIO_WRITE;
+sys_process.c:proc_writemem(struct thread *td, struct proc *p, vm_offset_t va, void *buf,
+sys_process.c:	return (proc_iop(td, p, va, buf, len, UIO_WRITE));
+sys_process.c: * complication in that PROC_WRITE disallows 32 bit consumers
+sys_process.c:#define	PROC_WRITE(w, t, a)	wrap32 ? \
+sys_process.c:	(safe ? proc_write_ ## w ## 32(t, a) : EINVAL ) : \
+sys_process.c:	proc_write_ ## w (t, a)
+sys_process.c:#define	PROC_WRITE(w, t, a)	proc_write_ ## w (t, a)
+sys_process.c:		/* set my trace flag and "owner" so it can read/write me */
+sys_process.c:	case PT_WRITE_I:
+sys_process.c:	case PT_WRITE_D:
+sys_process.c:		if (proc_writemem(td, p, (off_t)(uintptr_t)addr, &data,
+sys_process.c:			CTR3(KTR_PTRACE, "PT_WRITE: pid %d: %p <= %#x",
+sys_process.c:		case PIOD_WRITE_D:
+sys_process.c:		case PIOD_WRITE_I:
+sys_process.c:			CTR3(KTR_PTRACE, "PT_IO: pid %d: WRITE (%p, %#x)",
+sys_process.c:			uio.uio_rw = UIO_WRITE;
+sys_process.c:		error = PROC_WRITE(regs, td2, addr);
+sys_process.c:		error = PROC_WRITE(fpregs, td2, addr);
+sys_process.c:		error = PROC_WRITE(dbregs, td2, addr);
+sys_process.c:#undef PROC_WRITE
+sys_socket.c:static fo_rdwr_t soo_write;
+sys_socket.c:	.fo_write = soo_write,
+sys_socket.c:soo_write(struct file *fp, struct uio *uio, struct ucred *active_cred,
+sys_socket.c:	case FIONWRITE:
+sys_socket.c:	return (sb == &so->so_rcv ? soreadable(so) : sowriteable(so));
+sys_socket.c:		uio.uio_rw = UIO_WRITE;
+sys_socket.c:		 * write() on the socket.  If the socket is
+sys_socket.c:		MPASS(opcode == LIO_WRITE);
+sys_socket.c:	case LIO_WRITE:
+syscalls.c:	"write",			/* 4 = write */
+syscalls.c:	"obs_vwrite",			/* 68 = obsolete vwrite */
+syscalls.c:	"writev",			/* 121 = writev */
+syscalls.c:	"compat6.pwrite",		/* 174 = freebsd6 pwrite */
+syscalls.c:	"aio_write",			/* 256 = aio_write */
+syscalls.c:	"pwritev",			/* 290 = pwritev */
+syscalls.c:	"compat6.aio_write",		/* 319 = freebsd6 aio_write */
+syscalls.c:	"pwrite",			/* 476 = pwrite */
+syscalls.master:4	AUE_NULL	STD	{ ssize_t write(int fd, const void *buf, \
+syscalls.master:68	AUE_NULL	OBSOL	vwrite
+syscalls.master:121	AUE_WRITEV	STD	{ int writev(int fd, struct iovec *iovp, \
+syscalls.master:174	AUE_PWRITE	COMPAT6	{ ssize_t pwrite(int fd, \
+syscalls.master:256	AUE_NULL	STD	{ int aio_write(struct aiocb *aiocbp); }
+syscalls.master:290	AUE_PWRITEV	STD	{ ssize_t pwritev(int fd, struct iovec *iovp, \
+syscalls.master:319	AUE_NULL	COMPAT6	{ int aio_write(struct oaiocb *aiocbp); }
+syscalls.master:476	AUE_PWRITE	STD	{ ssize_t pwrite(int fd, const void *buf, \
+systrace_args.c:	/* write */
+systrace_args.c:		struct write_args *p = params;
+systrace_args.c:	/* writev */
+systrace_args.c:		struct writev_args *p = params;
+systrace_args.c:	/* aio_write */
+systrace_args.c:		struct aio_write_args *p = params;
+systrace_args.c:	/* pwritev */
+systrace_args.c:		struct pwritev_args *p = params;
+systrace_args.c:	/* pwrite */
+systrace_args.c:		struct pwrite_args *p = params;
+systrace_args.c:	/* write */
+systrace_args.c:	/* writev */
+systrace_args.c:	/* aio_write */
+systrace_args.c:	/* pwritev */
+systrace_args.c:	/* pwrite */
+systrace_args.c:	/* write */
+systrace_args.c:	/* writev */
+systrace_args.c:	/* aio_write */
+systrace_args.c:	/* pwritev */
+systrace_args.c:	/* pwrite */
+sysv_ipc.c:		error = priv_check(td, PRIV_IPC_WRITE);
+sysv_msg.c:		DPRINTF(("requester doesn't have write access\n"));
+sysv_msg.c:	 * enqueue permissions, along with read/write permissions to the
+sysv_shm.c:		prot |= VM_PROT_WRITE;
+tty.c:		tty_flush(tp, FWRITE);
+tty.c:	tty_wakeup(tp, FREAD|FWRITE);
+tty.c:			/* Only allow them in write()/ioctl(). */
+tty.c:ttydev_write(struct cdev *dev, struct uio *uio, int ioflag)
+tty.c:		/* Allow non-blocking writes to bypass serialization. */
+tty.c:		error = ttydisc_write(tp, uio, ioflag);
+tty.c:		/* Serialize write() calls. */
+tty.c:		error = ttydisc_write(tp, uio, ioflag);
+tty.c:		 * Lock state devices.  Just overwrite the values of the
+tty.c:		/* See if we can write something. */
+tty.c:		if (ttydisc_write_poll(tp) > 0)
+tty.c:tty_kqops_write_detach(struct knote *kn)
+tty.c:tty_kqops_write_event(struct knote *kn, long hint __unused)
+tty.c:		kn->kn_data = ttydisc_write_poll(tp);
+tty.c:static struct filterops tty_kqops_write = {
+tty.c:	.f_detach = tty_kqops_write_detach,
+tty.c:	.f_event = tty_kqops_write_event,
+tty.c:	case EVFILT_WRITE:
+tty.c:		kn->kn_fop = &tty_kqops_write;
+tty.c:	.d_write	= ttydev_write,
+tty.c:	.d_write	= ttyil_rdwr,
+tty.c:	tty_wakeup(tp, FREAD|FWRITE);
+tty.c:	if (flags & FWRITE) {
+tty.c:	if (flags & FWRITE) {
+tty.c:		tty_wakeup(tp, FWRITE);
+tty.c:			ttydevsw_pktnotify(tp, TIOCPKT_FLUSHWRITE);
+tty.c:	case FIONWRITE:
+tty.c:			flags = (FREAD|FWRITE);
+tty.c:			flags &= (FREAD|FWRITE);
+tty.c:		if (ttyoutq_write_nofrag(&tp->t_outq,
+tty.c:		if (ttyoutq_write_nofrag(&tp->t_outq,
+tty.c:ttyconsdev_write(struct cdev *dev, struct uio *uio, int ioflag)
+tty.c:	return (ttydev_write(dev, uio, ioflag));
+tty.c:	.d_write	= ttyconsdev_write,
+tty.c:	db_printf("\twritepos: %u\n", tp->t_writepos);
+tty_inq.c:		 * - The write pointer
+tty_inq.c:		 *   the write pointer to a new block.
+tty_inq.c:ttyinq_write(struct ttyinq *ti, const void *buf, size_t nbytes, int quote)
+tty_inq.c:			/* We reached the end of this block on last write. */
+tty_inq.c:ttyinq_write_nofrag(struct ttyinq *ti, const void *buf, size_t nbytes, int quote)
+tty_inq.c:	/* We should always be able to write it back. */
+tty_inq.c:	ret = ttyinq_write(ti, buf, nbytes, quote);
+tty_outq.c:		 * - The write pointer
+tty_outq.c:		 * - The write pointer
+tty_outq.c:		 *   the write pointer to a new block.
+tty_outq.c:ttyoutq_write(struct ttyoutq *to, const void *buf, size_t nbytes)
+tty_outq.c:			/* We reached the end of this block on last write. */
+tty_outq.c:ttyoutq_write_nofrag(struct ttyoutq *to, const void *buf, size_t nbytes)
+tty_outq.c:	/* We should always be able to write it back. */
+tty_outq.c:	ret = ttyoutq_write(to, buf, nbytes);
+tty_pts.c:#define	PTS_FINISHED	0x2	/* Return errors on read()/write(). */
+tty_pts.c:	struct cv	pts_inwait;	/* (t) Blocking write() on master. */
+tty_pts.c:	struct selinfo	pts_inpoll;	/* (t) Select queue for write(). */
+tty_pts.c:ptsdev_write(struct file *fp, struct uio *uio, struct ucred *active_cred,
+tty_pts.c:pts_kqops_write_detach(struct knote *kn)
+tty_pts.c:pts_kqops_write_event(struct knote *kn, long hint)
+tty_pts.c:static struct filterops pts_kqops_write = {
+tty_pts.c:	.f_detach = pts_kqops_write_detach,
+tty_pts.c:	.f_event = pts_kqops_write_event,
+tty_pts.c:	case EVFILT_WRITE:
+tty_pts.c:		kn->kn_fop = &pts_kqops_write;
+tty_pts.c:	.fo_write	= ptsdev_write,
+tty_pts.c:	/* Wake up any blocked readers/writers. */
+tty_ttydisc.c:	tty_flush(tp, FREAD | FWRITE);
+tty_ttydisc.c:ttydisc_write_oproc(struct tty *tp, char c)
+tty_ttydisc.c:#define PRINT_NORMAL() ttyoutq_write_nofrag(&tp->t_outq, &c, 1)
+tty_ttydisc.c:			error = ttyoutq_write_nofrag(&tp->t_outq,
+tty_ttydisc.c:			error = ttyoutq_write_nofrag(&tp->t_outq, "\r\n", 2);
+tty_ttydisc.c:			tp->t_column = tp->t_writepos = 0;
+tty_ttydisc.c:		tp->t_column = tp->t_writepos = 0;
+tty_ttydisc.c:ttydisc_write(struct tty *tp, struct uio *uio, int ioflag)
+tty_ttydisc.c:	 * in ttydev_write().
+tty_ttydisc.c:				if (ttydisc_write_oproc(tp, *obstart) == 0) {
+tty_ttydisc.c:					tp->t_writepos = tp->t_column;
+tty_ttydisc.c:				/* We're going to write regular data. */
+tty_ttydisc.c:				wlen = ttyoutq_write(&tp->t_outq, obstart, plen);
+tty_ttydisc.c:				tp->t_writepos = tp->t_column;
+tty_ttydisc.c:			 * The driver may write back the data
+tty_ttydisc.c:	 * uio counters. We need to do this to make sure write() doesn't
+tty_ttydisc.c:		tty_flush(tp, FREAD|FWRITE);
+tty_ttydisc.c:		return ttydisc_write_oproc(tp, c);
+tty_ttydisc.c:			return ttyoutq_write_nofrag(&tp->t_outq, ob, 4);
+tty_ttydisc.c:			return ttyoutq_write_nofrag(&tp->t_outq, ob, 2);
+tty_ttydisc.c:		return ttyoutq_write_nofrag(&tp->t_outq, &c, 1);
+tty_ttydisc.c:	struct ttydisc_recalc_length data = { tp, tp->t_writepos };
+tty_ttydisc.c:		if (tp->t_writepos >= tp->t_column) {
+tty_ttydisc.c:					ttyoutq_write_nofrag(&tp->t_outq,
+tty_ttydisc.c:				ttyoutq_write_nofrag(&tp->t_outq, "\b", 1);
+tty_ttydisc.c:				ttyoutq_write_nofrag(&tp->t_outq,
+tty_ttydisc.c:				ttyoutq_write_nofrag(&tp->t_outq, "\b \b", 3);
+tty_ttydisc.c:				tty_flush(tp, FREAD|FWRITE);
+tty_ttydisc.c:					ttyoutq_write_nofrag(&tp->t_outq, "^\b", 2);
+tty_ttydisc.c:				tty_flush(tp, FREAD|FWRITE);
+tty_ttydisc.c:	if (ttyinq_write_nofrag(&tp->t_inq, ob, ol, quote) != 0) {
+tty_ttydisc.c:			ttyoutq_write_nofrag(&tp->t_outq, "\a", 1);
+tty_ttydisc.c:	ret = ttyinq_write(&tp->t_inq, buf, len, 0);
+tty_ttydisc.c:	tty_wakeup(tp, FWRITE);
+tty_ttydisc.c:	tp->t_writepos = tp->t_column;
+uipc_mqueue.c:static int	filt_mqwrite(struct knote *kn, long hint);
+uipc_mqueue.c:	.f_event = filt_mqwrite,
+uipc_mqueue.c:			error = VOP_ACCESS(dvp, VWRITE, cnp->cn_cred, td);
+uipc_mqueue.c:		error = VOP_ACCESS(dvp, VWRITE, cnp->cn_cred, td);
+uipc_mqueue.c:		    (error = VOP_ACCESS(vp, VWRITE, ap->a_cred, td))))
+uipc_mqueue.c:			if (flags & FWRITE)
+uipc_mqueue.c:				accmode |= VWRITE;
+uipc_mqueue.c:	finit(fp, flags & (FREAD | FWRITE | O_NONBLOCK), DTYPE_MQUEUE, pn,
+uipc_mqueue.c:getmq_write(struct thread *td, int fd, struct file **fpp,
+uipc_mqueue.c:	return _getmq(td, fd, cap_rights_init(&rights, CAP_WRITE), fget_write,
+uipc_mqueue.c:	error = getmq_write(td, uap->mqd, &fp, NULL, &mq);
+uipc_mqueue.c:	} else if (kn->kn_filter == EVFILT_WRITE) {
+uipc_mqueue.c:	else if (kn->kn_filter == EVFILT_WRITE)
+uipc_mqueue.c:filt_mqwrite(struct knote *kn, long hint)
+uipc_mqueue.c:	.fo_write		= invfo_rdwr,
+uipc_mqueue.c:	.vop_write		= VOP_EOPNOTSUPP,
+uipc_mqueue.c:	error = getmq_write(td, uap->mqd, &fp, NULL, &mq);
+uipc_sem.c:	.fo_write = invfo_rdwr,
+uipc_sem.c: * and write access.
+uipc_sem.c:	    VREAD | VWRITE, ucred, NULL);
+uipc_sem.c:		error = priv_check_cred(ucred, PRIV_SEM_WRITE, 0);
+uipc_sem.c:	finit(fp, FREAD | FWRITE, DTYPE_SEM, ks, &ksem_ops);
+uipc_shm.c:static fo_rdwr_t	shm_write;
+uipc_shm.c:	.fo_write = shm_write,
+uipc_shm.c:	if (uio->uio_rw == UIO_WRITE && error == 0) {
+uipc_shm.c:shm_write(struct file *fp, struct uio *uio, struct ucred *active_cred,
+uipc_shm.c:	error = mac_posixshm_check_write(active_cred, fp->f_cred, shmfd);
+uipc_shm.c: * specified combination of FREAD and FWRITE.
+uipc_shm.c:	if (flags & FWRITE)
+uipc_shm.c:		accmode |= VWRITE;
+uipc_shm.c:			    FREAD | FWRITE);
+uipc_shm.c:			 * opened with read/write.
+uipc_shm.c:	if ((fp->f_flag & FWRITE) != 0)
+uipc_shm.c:		maxprot |= VM_PROT_WRITE;
+uipc_shm.c:	    (maxprot & VM_PROT_WRITE) == 0 &&
+uipc_shm.c:	    (prot & VM_PROT_WRITE) != 0)
+uipc_shm.c:	    VMFS_OPTIMAL_SPACE, VM_PROT_READ | VM_PROT_WRITE,
+uipc_shm.c:	    VM_PROT_READ | VM_PROT_WRITE, 0);
+uipc_shm.c:	rv = vm_map_lookup(&map, kva, VM_PROT_READ | VM_PROT_WRITE, &entry,
+uipc_socket.c:static int	filt_sowrite(struct knote *kn, long hint);
+uipc_socket.c:static struct filterops sowrite_filtops = {
+uipc_socket.c:	.f_event = filt_sowrite,
+uipc_socket.c:		if (sowriteable(so))
+uipc_socket.c:	case EVFILT_WRITE:
+uipc_socket.c:		kn->kn_fop = &sowrite_filtops;
+uipc_socket.c:filt_sowrite(struct knote *kn, long hint)
+uipc_socket.c:	hhook_run_socket(so, kn, HHOOK_FILT_SOWRITE);
+uipc_syscalls.c:		finit(fp, FREAD | FWRITE | fflag, DTYPE_SOCKET, so, &socketops);
+uipc_syscalls.c:	finit(fp1, FREAD | FWRITE | fflag, DTYPE_SOCKET, fp1->f_data,
+uipc_syscalls.c:	finit(fp2, FREAD | FWRITE | fflag, DTYPE_SOCKET, fp2->f_data,
+uipc_syscalls.c:	auio.uio_rw = UIO_WRITE;
+uipc_syscalls.c:		ktrgenio(s, UIO_WRITE, ktruio, error);
+uipc_usrreq.c: * complex reads and read-modify-writes require the mutex to be held.  No
+uipc_usrreq.c:	 * that supports both atomic record writes and control data.
+uipc_usrreq.c:	if (vp != NULL || vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+uipc_usrreq.c:		error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH);
+uipc_usrreq.c:		vn_finished_write(mp);
+uipc_usrreq.c:	vn_finished_write(mp);
+uipc_usrreq.c:	 * Adjust backpressure on sender and wakeup any waiting to write.
+uipc_usrreq.c:	error = mac_vnode_check_open(td->td_ucred, vp, VWRITE | VREAD);
+uipc_usrreq.c:	error = VOP_ACCESS(vp, VWRITE, td->td_ucred, td);
+vfs_acl.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_acl.c:	vn_finished_write(mp);
+vfs_acl.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_acl.c:	vn_finished_write(mp);
+vfs_aio.c: * use the generic fo_read/fo_write operations which can block.  The
+vfs_aio.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_aio.c:	vn_finished_write(mp);
+vfs_aio.c: * The AIO processing activity for LIO_READ/LIO_WRITE.  This is the code that
+vfs_aio.c:	    job->uaiocb.aio_lio_opcode == LIO_WRITE,
+vfs_aio.c:			bwillwrite();
+vfs_aio.c:		auio.uio_rw = UIO_WRITE;
+vfs_aio.c:		error = fo_write(fp, &auio, fp->f_cred, FOF_OFFSET, td);
+vfs_aio.c:		if ((error == EPIPE) && (cb->aio_lio_opcode == LIO_WRITE)) {
+vfs_aio.c:	bp->bio_cmd = cb->aio_lio_opcode == LIO_WRITE ? BIO_WRITE : BIO_READ;
+vfs_aio.c:		prot |= VM_PROT_WRITE;	/* Less backwards than it looks */
+vfs_aio.c:	case LIO_WRITE:
+vfs_aio.c:		error = fget_write(td, fd,
+vfs_aio.c:		    cap_rights_init(&rights, CAP_PWRITE), &fp);
+vfs_aio.c:	if ((opcode == LIO_READ || opcode == LIO_WRITE) &&
+vfs_aio.c:	 * behavior is to retry the operation via fo_read/fo_write.
+vfs_aio.c:	case LIO_WRITE:
+vfs_aio.c:/* syscall - asynchronous write to a file (REALTIME) */
+vfs_aio.c:freebsd6_aio_write(struct thread *td, struct freebsd6_aio_write_args *uap)
+vfs_aio.c:	return (aio_aqueue(td, (struct aiocb *)uap->aiocbp, NULL, LIO_WRITE,
+vfs_aio.c:sys_aio_write(struct thread *td, struct aio_write_args *uap)
+vfs_aio.c:	return (aio_aqueue(td, uap->aiocbp, NULL, LIO_WRITE, &aiocb_ops));
+vfs_aio.c:	if (job->uaiocb.aio_lio_opcode == LIO_WRITE)
+vfs_aio.c:freebsd6_freebsd32_aio_write(struct thread *td,
+vfs_aio.c:    struct freebsd6_freebsd32_aio_write_args *uap)
+vfs_aio.c:	return (aio_aqueue(td, (struct aiocb *)uap->aiocbp, NULL, LIO_WRITE,
+vfs_aio.c:freebsd32_aio_write(struct thread *td, struct freebsd32_aio_write_args *uap)
+vfs_aio.c:	return (aio_aqueue(td, (struct aiocb *)uap->aiocbp, NULL, LIO_WRITE,
+vfs_bio.c:	.bop_write	=	bufwrite,
+vfs_bio.c:    "Use the VM system for directory writes");
+vfs_bio.c:    0, "Number of bdwrite to bawrite conversions to limit dirty buffers");
+vfs_bio.c:int bdwriteskip;
+vfs_bio.c:SYSCTL_INT(_vfs, OID_AUTO, bdwriteskip, CTLFLAG_RW, &bdwriteskip,
+vfs_bio.c:    0, "Number of buffers supplied to bdwrite with snapshot deadlock risk");
+vfs_bio.c:    0, "Number of bdwrite to bawrite conversions to clear dirty buffers");
+vfs_bio.c:static long barrierwrites;
+vfs_bio.c:SYSCTL_LONG(_vfs, OID_AUTO, barrierwrites, CTLFLAG_RW, &barrierwrites, 0,
+vfs_bio.c:    "Number of barrier writes");
+vfs_bio.c: * Request for the buf daemon to write more buffers than is indicated by
+vfs_bio.c: * Used in numdirtywakeup(), bufspace_wakeup(), bwillwrite(),
+vfs_bio.c: * Synchronization for bwillwrite() waiters.
+vfs_bio.c:		/* On overflow, still write out a long to trigger ENOMEM. */
+vfs_bio.c: *	Wakeup any bwillwrite() waiters.
+vfs_bio.c: *	threads blocked in bwillwrite().
+vfs_bio.c: *	Wake up processes that are waiting on asynchronous writes to fall
+vfs_bio.c: *	Decrement the outstanding write count according.
+vfs_bio.c: *	running.  This routine is used in async-write situations to
+vfs_bio.c: *	prevent creating huge backups of pending writes to a device.
+vfs_bio.c: *	Only asynchronous writes are governed by this function.
+vfs_bio.c: *	This does NOT turn an async write into a sync write.  It waits  
+vfs_bio.c: *	for earlier writes to complete and generally returns before the
+vfs_bio.c: *	caller's write has reached the device.
+vfs_bio.c: * may be called more then once.  We CANNOT write to the memory area
+vfs_bio.c:	 * 128 outstanding write IO requests (if IO size is 128 KiB),
+vfs_bio.c:	 * of delayed-write dirty buffers we allow to stack up.
+vfs_bio.c:		 * Skip buffers with background writes in progress.
+vfs_bio.c:		 * Requeue the background write buffer with error and
+vfs_bio.c: * Write, release buffer on completion.  (Done by iodone
+vfs_bio.c:bufwrite(struct buf *bp)
+vfs_bio.c:	CTR3(KTR_BUF, "bufwrite(%p) vp %p flags %X", bp, bp->b_vp, bp->b_flags);
+vfs_bio.c:		barrierwrites++;
+vfs_bio.c:	 * Mark the buffer clean.  Increment the bufobj write count
+vfs_bio.c:	 * empty dirty list and zero counter for writes in progress,
+vfs_bio.c:	bp->b_iocmd = BIO_WRITE;
+vfs_bio.c:	 * Normal bwrites pipeline writes
+vfs_bio.c:		 * don't allow the async write to saturate the I/O
+vfs_bio.c:				panic("bdwrite: found ourselves");
+vfs_bio.c:				vfs_bio_awrite(nbp);
+vfs_bio.c:				bawrite(nbp);
+vfs_bio.c: * Delayed write. (Buffer is marked dirty).  Do not bother writing
+vfs_bio.c:bdwrite(struct buf *bp)
+vfs_bio.c:	CTR3(KTR_BUF, "bdwrite(%p) vp %p flags %X", bp, bp->b_vp, bp->b_flags);
+vfs_bio.c:	    ("Barrier request in delayed write %p", bp));
+vfs_bio.c:	 * the pages are in a delayed write buffer -- the VFS layer
+vfs_bio.c:	 * note: we cannot initiate I/O from a bdwrite even if we wanted to,
+vfs_bio.c: *	Turn buffer into delayed write request.  We must clear BIO_READ and
+vfs_bio.c: *	bdirty() is kinda like bdwrite() - we have to clear B_INVAL which
+vfs_bio.c: *	might have been set pre-getblk().  Unlike bwrite/bdwrite, bdirty()
+vfs_bio.c:	bp->b_iocmd = BIO_WRITE;
+vfs_bio.c:	 * Since it is now being written, we can clear its deferred write flag.
+vfs_bio.c: *	bawrite:
+vfs_bio.c: *	Asynchronous write.  Start output on a buffer, but do not wait for
+vfs_bio.c: *	bwrite() ( or the VOP routine anyway ) is responsible for handling 
+vfs_bio.c:bawrite(struct buf *bp)
+vfs_bio.c:	(void) bwrite(bp);
+vfs_bio.c: *	babarrierwrite:
+vfs_bio.c: *	Asynchronous barrier write.  Start output on a buffer, but do not
+vfs_bio.c: *	wait for it to complete.  Place a write barrier after this write so
+vfs_bio.c: *	the disk before any buffers written after this write are committed
+vfs_bio.c:babarrierwrite(struct buf *bp)
+vfs_bio.c:	(void) bwrite(bp);
+vfs_bio.c: *	bbarrierwrite:
+vfs_bio.c: *	Synchronous barrier write.  Start output on a buffer and wait for
+vfs_bio.c: *	it to complete.  Place a write barrier after this write so that
+vfs_bio.c: *	the disk before any buffers written after this write are committed
+vfs_bio.c:bbarrierwrite(struct buf *bp)
+vfs_bio.c:	return (bwrite(bp));
+vfs_bio.c: *	bwillwrite:
+vfs_bio.c: *	write.  We do not want to starve the buffer cache with too many
+vfs_bio.c:bwillwrite(void)
+vfs_bio.c:	if (bp->b_iocmd == BIO_WRITE && (bp->b_ioflags & BIO_ERROR) &&
+vfs_bio.c:		 * Failed write, redirty.  All errors except ENXIO (which
+vfs_bio.c:		 * cache the buffer, or we failed to write to a device that's
+vfs_bio.c:	 * getting freed causing a previous write (bdwrite()) to get 'lost'
+vfs_bio.c:	 * invalidated.  BIO_ERROR cannot be set for a failed write unless the
+vfs_bio.c:	 * the buffer is an NFS buffer, it is tracking piecemeal writes or
+vfs_bio.c:	 * buffer has a background write in progress, we need to keep it
+vfs_bio.c:	 * background write.
+vfs_bio.c:		bp->b_xflags &= ~(BX_BKGRDWRITE | BX_ALTDATA);
+vfs_bio.c: * bqrelse() is used by bdwrite() to requeue a delayed write, and used by
+vfs_bio.c:			 * In the write case, the valid and clean bits are
+vfs_bio.c:			 * already changed correctly ( see bdwrite() ), so we 
+vfs_bio.c: * write.
+vfs_bio.c:	/* Only cluster with valid clusterable delayed write buffers */
+vfs_bio.c: *	vfs_bio_awrite:
+vfs_bio.c: *	Implement clustered async writes for clearing out B_DELWRI buffers.
+vfs_bio.c:vfs_bio_awrite(struct buf *bp)
+vfs_bio.c:		 * this is a possible cluster write
+vfs_bio.c:	(void) bwrite(bp);
+vfs_bio.c:		 * dependencies, so just write the first one
+vfs_bio.c: *	free up B_INVAL buffers instead of write them, which NFS is 
+vfs_bio.c:		if (vn_start_write(vp, &mp, V_NOWAIT) != 0) {
+vfs_bio.c:				vfs_bio_awrite(bp);
+vfs_bio.c:				bwrite(bp);
+vfs_bio.c:			vn_finished_write(mp);
+vfs_bio.c:		vn_finished_write(mp);
+vfs_bio.c: * are clean.  This is used for delayed writes where the data is
+vfs_bio.c: *	getblk() also forces a bwrite() for any B_DELWRI buffer whos
+vfs_bio.c: *	a write attempt or if it was a successful read.  If the caller 
+vfs_bio.c:					bwrite(bp);
+vfs_bio.c:						bwrite(bp);
+vfs_bio.c:		 * case, B_CACHE is set after the first write completes,
+vfs_bio.c:		 * NOTE!  b*write() sets B_CACHE.  If we cleared B_CACHE
+vfs_bio.c:		 * buffer to remain with B_CACHE set after the write
+vfs_bio.c:		 * after the write.
+vfs_bio.c:		 * B_CACHE in bwrite() except if B_DELWRI is already set,
+vfs_bio.c:			bwrite(bp);
+vfs_bio.c: *	read error occurred, or if the op was a write.  B_CACHE is never
+vfs_bio.c:	if (bp->b_iocmd == BIO_WRITE)
+vfs_bio.c:		 * occurred.  B_CACHE is set for writes in the b*write()
+vfs_bio.c:			pmap_remove_write(m);
+vfs_bio.c:		prot |= VM_PROT_WRITE;	/* Less backwards than it looks */
+vfs_cache.c: * is for DELETE, or NOCACHE is set (rewrite), and the
+vfs_cache.c: * to be write-locked to prevent other threads from seeing the entry.
+vfs_cluster.c:static int write_behind = 1;
+vfs_cluster.c:SYSCTL_INT(_vfs, OID_AUTO, write_behind, CTLFLAG_RW, &write_behind, 0,
+vfs_cluster.c:    "Cluster write-behind; 0: disable, 1: enable, 2: backed off");
+vfs_cluster.c:			 * background write), or if the buffer is not
+vfs_cluster.c: * Cleanup after a clustered read or write.
+vfs_cluster.c:			 * XXX the bdwrite()/bqrelse() issued during
+vfs_cluster.c: *	Implement modified write build for cluster.
+vfs_cluster.c: *		write_behind = 0	write behind disabled
+vfs_cluster.c: *		write_behind = 1	write behind normal (default)
+vfs_cluster.c: *		write_behind = 2	write behind backed-off
+vfs_cluster.c:	switch (write_behind) {
+vfs_cluster.c: * Do clustered write for FFS.
+vfs_cluster.c: *	1. Write is not sequential (write asynchronously)
+vfs_cluster.c: *	Write is sequential:
+vfs_cluster.c: *	4.	end of a cluster - asynchronously write cluster
+vfs_cluster.c:cluster_write(struct vnode *vp, struct buf *bp, u_quad_t filesize, int seqcount,
+vfs_cluster.c:	KASSERT(bp->b_offset != NOOFFSET, ("cluster_write: no buffer offset"));
+vfs_cluster.c:			 * write, or we have reached our maximum cluster size,
+vfs_cluster.c:					 * optimize the write ordering.
+vfs_cluster.c:						bdwrite(*bpp);
+vfs_cluster.c:			bawrite(bp);
+vfs_cluster.c:			bawrite(bp);
+vfs_cluster.c:			bdwrite(bp);
+vfs_cluster.c:		 * At end of cluster, write it out if seqcount tells us we
+vfs_cluster.c:		bdwrite(bp);
+vfs_cluster.c:		bawrite(bp);
+vfs_cluster.c:		bdwrite(bp);
+vfs_cluster.c:		 * If the buffer is not delayed-write (i.e. dirty), or it
+vfs_cluster.c:		 * is delayed-write but either locked or inval, it cannot
+vfs_cluster.c:		 * partake in the clustered write.
+vfs_cluster.c:			bawrite(tbp);
+vfs_cluster.c:			tbp->b_iocmd = BIO_WRITE;
+vfs_cluster.c:		bawrite(bp);
+vfs_default.c:static int vop_stdget_writecount(struct vop_get_writecount_args *ap);
+vfs_default.c:static int vop_stdadd_writecount(struct vop_add_writecount_args *ap);
+vfs_default.c:	.vop_getwritemount = 	vop_stdgetwritemount,
+vfs_default.c:	.vop_get_writecount =	vop_stdget_writecount,
+vfs_default.c:	.vop_add_writecount =	vop_stdadd_writecount,
+vfs_default.c: *	Typically B_INVAL is assumed to already be clear prior to a write
+vfs_default.c:	KASSERT((ap->a_accmode & ~(VEXEC | VWRITE | VREAD | VADMIN |
+vfs_default.c: * Return our mount point, as we will take charge of the writes.
+vfs_default.c:vop_stdgetwritemount(ap)
+vfs_default.c:	struct vop_getwritemount_args /* {
+vfs_default.c:			vfs_bio_awrite(bp);
+vfs_default.c:			bawrite(bp);
+vfs_default.c:	 * complete (which could include background bitmap writes), then
+vfs_default.c:			 * If we are unable to write any of these buffers
+vfs_default.c:			 * to write them out.
+vfs_default.c:		 * Read and write back anything below the nominal file
+vfs_default.c:		auio.uio_rw = UIO_WRITE;
+vfs_default.c:		error = VOP_WRITE(vp, &auio, 0, td->td_ucred);
+vfs_default.c:vop_stdget_writecount(struct vop_get_writecount_args *ap)
+vfs_default.c:	*ap->a_writecount = ap->a_vp->v_writecount;
+vfs_default.c:vop_stdadd_writecount(struct vop_add_writecount_args *ap)
+vfs_default.c:	ap->a_vp->v_writecount += ap->a_inc;
+vfs_export.c: * access rights (read/write/etc).
+vfs_extattr.c:	error = vn_start_write(nd.ni_vp, &mp_writable, V_WAIT | PCATCH);
+vfs_extattr.c:			vn_finished_write(mp_writable);
+vfs_extattr.c:	vn_finished_write(mp_writable);
+vfs_extattr.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_extattr.c:	auio.uio_rw = UIO_WRITE;
+vfs_extattr.c:	vn_finished_write(mp);
+vfs_extattr.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_extattr.c:	vn_finished_write(mp);
+vfs_lookup.c:	 * Disallow directory write attempts on read-only filesystems.
+vfs_lookup.c:	 * Disallow directory write attempts on read-only filesystems.
+vfs_mount.c:	if (mp->mnt_writeopcount != 0)
+vfs_mount.c:		panic("vfs_mount_destroy: nonzero writeopcount");
+vfs_mount.c:	if (mp->mnt_secondary_writes != 0)
+vfs_mount.c:		panic("vfs_mount_destroy: nonzero secondary_writes");
+vfs_mount.c:	 * XXX The final recipients of VFS_MOUNT just overwrite the ndp they
+vfs_mount.c:	 * XXX The final recipients of VFS_MOUNT just overwrite the ndp they
+vfs_mount.c:	vn_finished_write(mp);
+vfs_mount.c:	vn_start_write(NULL, &mp, V_WAIT | V_MNTREF);
+vfs_mount.c:	vn_finished_write(mp);
+vfs_subr.c: * It is useful to delay writes of file data and filesystem metadata
+vfs_subr.c:	vn_start_write(NULL, &mp, V_WAIT);
+vfs_subr.c:	vn_finished_write(mp);
+vfs_subr.c:	if (vn_start_write(vp, &vnmp, V_NOWAIT) != 0) {
+vfs_subr.c:		    "%s: impossible to recycle, cannot start the write for %p",
+vfs_subr.c:		vn_finished_write(vnmp);
+vfs_subr.c:	vn_finished_write(vnmp);
+vfs_subr.c:	 * have write I/O in-progress but if there is a VM object then the
+vfs_subr.c:		 * write will occur while sleeping just above, so
+vfs_subr.c:			bwrite(bp);
+vfs_subr.c:			bawrite(bp);
+vfs_subr.c:	if (vn_start_write(vp, &mp, V_NOWAIT) != 0) {
+vfs_subr.c:	vn_finished_write(mp);
+vfs_subr.c:	VNASSERT(vp->v_writecount == 0, vp, ("Non-zero write count"));
+vfs_subr.c:	 * The write-out of the dirty pages is asynchronous.  At the
+vfs_subr.c: * If WRITECLOSE is set, only flush out regular file vnodes open for
+vfs_subr.c: * If the SKIPSYSTEM or WRITECLOSE flags are specified, rootrefs must
+vfs_subr.c:		KASSERT((flags & (SKIPSYSTEM | WRITECLOSE)) == 0,
+vfs_subr.c:		 * If WRITECLOSE is set, flush out unlinked but still open
+vfs_subr.c:		if (flags & WRITECLOSE) {
+vfs_subr.c:			    (vp->v_writecount == 0 || vp->v_type != VREG)) {
+vfs_subr.c:		(void) vn_start_secondary_write(vp, &mp, V_WAIT);
+vfs_subr.c:		vn_finished_secondary_write(mp);
+vfs_subr.c:	printf("    usecount %d, writecount %d, refcount %d mountedhere %p\n",
+vfs_subr.c:	    vp->v_usecount, vp->v_writecount, vp->v_holdcnt, vp->v_mountedhere);
+vfs_subr.c:	if (vp->v_vflag & VV_COPYONWRITE)
+vfs_subr.c:		strlcat(buf, "|VV_COPYONWRITE", sizeof(buf));
+vfs_subr.c:	    VV_CACHEDLABEL | VV_TEXT | VV_COPYONWRITE | VV_SYSTEM | VV_PROCDEP |
+vfs_subr.c:	MNT_KERN_FLAG(MNTK_SHARED_WRITES);
+vfs_subr.c:	    "ffree=%jd syncwrites=%ju asyncwrites=%ju syncreads=%ju "
+vfs_subr.c:	    (intmax_t)sp->f_ffree, (uintmax_t)sp->f_syncwrites,
+vfs_subr.c:	    (uintmax_t)sp->f_asyncwrites, (uintmax_t)sp->f_syncreads,
+vfs_subr.c:	db_printf("    mnt_writeopcount = %d\n", mp->mnt_writeopcount);
+vfs_subr.c:	db_printf("    mnt_secondary_writes = %d\n", mp->mnt_secondary_writes);
+vfs_subr.c:	db_printf("    mnt_secondary_accwrites = %d\n",
+vfs_subr.c:	    mp->mnt_secondary_accwrites);
+vfs_subr.c:			XV_COPY(writecount);
+vfs_subr.c:	if (vn_start_write(NULL, &mp, V_NOWAIT) != 0) {
+vfs_subr.c:	vn_finished_write(mp);
+vfs_subr.c:	KASSERT((accmode & ~(VEXEC | VWRITE | VREAD | VADMIN | VAPPEND)) == 0,
+vfs_subr.c:	KASSERT((accmode & VAPPEND) == 0 || (accmode & VWRITE),
+vfs_subr.c:	    ("VAPPEND without VWRITE"));
+vfs_subr.c:			dac_granted |= (VWRITE | VAPPEND);
+vfs_subr.c:			dac_granted |= (VWRITE | VAPPEND);
+vfs_subr.c:		dac_granted |= (VWRITE | VAPPEND);
+vfs_subr.c:	if ((accmode & VWRITE) && ((dac_granted & VWRITE) == 0) &&
+vfs_subr.c:	    !priv_check_cred(cred, PRIV_VFS_WRITE, 0))
+vfs_subr.c:		priv_granted |= (VWRITE | VAPPEND);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_tdvp, NOTE_WRITE);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE | NOTE_LINK);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE);
+vfs_subr.c:		hint = NOTE_WRITE;
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE | NOTE_LINK);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_dvp, NOTE_WRITE);
+vfs_subr.c:		VFS_KNOTE_LOCKED(a->a_vp, (a->a_fflag & FWRITE) != 0 ?
+vfs_subr.c:		    NOTE_CLOSE_WRITE : NOTE_CLOSE);
+vfs_subr.c:static int	filt_vfswrite(struct knote *kn, long hint);
+vfs_subr.c:static struct filterops vfswrite_filtops = {
+vfs_subr.c:	.f_event = filt_vfswrite
+vfs_subr.c:	case EVFILT_WRITE:
+vfs_subr.c:		kn->kn_fop = &vfswrite_filtops;
+vfs_subr.c:filt_vfswrite(struct knote *kn, long hint)
+vfs_subr.c: * reducing it into standard unix access bits - VEXEC, VREAD, VWRITE,
+vfs_subr.c:	 * either of these bits. Caller should check for VWRITE
+vfs_syscalls.c:		    vn_start_write(NULL, &mp, V_NOWAIT) == 0) {
+vfs_syscalls.c:			vn_finished_write(mp);
+vfs_syscalls.c:	osp->f_syncwrites = MIN(nsp->f_syncwrites, LONG_MAX);
+vfs_syscalls.c:	osp->f_asyncwrites = MIN(nsp->f_asyncwrites, LONG_MAX);
+vfs_syscalls.c:			cap_rights_set(rightsp, CAP_WRITE);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:			error = vn_start_write(vp, &mp, V_NOWAIT);
+vfs_syscalls.c:				error = vn_start_write(NULL, &mp,
+vfs_syscalls.c:			vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:		if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:			if ((error = vn_start_write(NULL, &mp,
+vfs_syscalls.c:		vn_finished_write(mp);
+vfs_syscalls.c: * Reposition read/write file offset.
+vfs_syscalls.c: * Reposition read/write file offset.
+vfs_syscalls.c:		accmode |= VWRITE;
+vfs_syscalls.c:	if ((accmode & VWRITE) == 0 || (error = vn_writechk(vp)) == 0)
+vfs_syscalls.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	if ((error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0) {
+vfs_syscalls.c:	else if ((error = mac_vnode_check_write(td->td_ucred, NOCRED, vp))) {
+vfs_syscalls.c:	else if ((error = vn_writechk(vp)) == 0 &&
+vfs_syscalls.c:	    (error = VOP_ACCESS(vp, VWRITE, td->td_ucred, td)) == 0) {
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:		/* XXXKIB: compete outstanding aio writes */;
+vfs_syscalls.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_syscalls.c:	if (MNT_SHARED_WRITES(mp) ||
+vfs_syscalls.c:	    ((mp == NULL) && MNT_SHARED_WRITES(vp->v_mount))) {
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	error = vn_start_write(fvp, &mp, V_NOWAIT);
+vfs_syscalls.c:		error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH);
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	bwillwrite();
+vfs_syscalls.c:	if (vn_start_write(nd.ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_syscalls.c:		if ((error = vn_start_write(NULL, &mp, V_XSLEEP | PCATCH)) != 0)
+vfs_syscalls.c:	vn_finished_write(mp);
+vfs_syscalls.c:	/* why not allow a non-read/write open for our lockd? */
+vfs_syscalls.c:	if (((fmode & (FREAD | FWRITE)) == 0) || (fmode & O_CREAT))
+vfs_syscalls.c:	error = fget(td, fd, cap_rights_init(&rights, CAP_WRITE), &fp);
+vfs_syscalls.c:	if ((fp->f_flag & FWRITE) == 0) {
+vfs_syscalls.c:		bwillwrite();
+vfs_syscalls.c:		error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_syscalls.c:			vn_finished_write(mp);
+vfs_syscalls.c:		error = mac_vnode_check_write(td->td_ucred, fp->f_cred, vp);
+vfs_syscalls.c:		vn_finished_write(mp);
+vfs_vnops.c:static fo_rdwr_t	vn_write;
+vfs_vnops.c:	.fo_write = vn_io_fault,
+vfs_vnops.c:		bwillwrite();
+vfs_vnops.c:			if (vn_start_write(ndp->ni_dvp, &mp, V_NOWAIT) != 0) {
+vfs_vnops.c:				if ((error = vn_start_write(NULL, &mp,
+vfs_vnops.c:			vn_finished_write(mp);
+vfs_vnops.c:		if (!(fmode & FWRITE))
+vfs_vnops.c:	if (fmode & (FWRITE | O_TRUNC)) {
+vfs_vnops.c:		accmode |= VWRITE;
+vfs_vnops.c:	if ((fmode & O_APPEND) && (fmode & FWRITE))
+vfs_vnops.c:		if (accmode & VWRITE) {
+vfs_vnops.c:			error = vn_writechk(vp);
+vfs_vnops.c:		if ((accmode & VWRITE) != 0)
+vfs_vnops.c:			error = vn_writechk(vp);
+vfs_vnops.c:	} else if  ((fmode & FWRITE) != 0) {
+vfs_vnops.c:		VOP_ADD_WRITECOUNT(vp, 1);
+vfs_vnops.c:		CTR3(KTR_VFS, "%s: vp %p v_writecount increased to %d",
+vfs_vnops.c:		    __func__, vp, vp->v_writecount);
+vfs_vnops.c: * Check for write permissions on the specified vnode.
+vfs_vnops.c:vn_writechk(vp)
+vfs_vnops.c:	ASSERT_VOP_LOCKED(vp, "vn_writechk");
+vfs_vnops.c:	if (vp->v_type != VFIFO && (flags & FWRITE) == 0 &&
+vfs_vnops.c:	vn_start_write(vp, &mp, V_WAIT);
+vfs_vnops.c:	if ((flags & (FWRITE | FOPENFAILED)) == FWRITE) {
+vfs_vnops.c:		VNASSERT(vp->v_writecount > 0, vp, 
+vfs_vnops.c:		    ("vn_close: negative writecount"));
+vfs_vnops.c:		VOP_ADD_WRITECOUNT(vp, -1);
+vfs_vnops.c:		CTR3(KTR_VFS, "%s: vp %p v_writecount decreased to %d",
+vfs_vnops.c:		    __func__, vp, vp->v_writecount);
+vfs_vnops.c:	vn_finished_write(mp);
+vfs_vnops.c:		if (rw == UIO_WRITE) { 
+vfs_vnops.c:			    (error = vn_start_write(vp, &mp, V_WAIT | PCATCH))
+vfs_vnops.c:			if (MNT_SHARED_WRITES(mp) ||
+vfs_vnops.c:			    ((mp == NULL) && MNT_SHARED_WRITES(vp->v_mount)))
+vfs_vnops.c:			error = mac_vnode_check_write(active_cred, file_cred,
+vfs_vnops.c:		} else /* if (rw == UIO_WRITE) */ {
+vfs_vnops.c:			error = VOP_WRITE(vp, &auio, ioflg, cred);
+vfs_vnops.c:			vn_finished_write(mp);
+vfs_vnops.c: * check bwillwrite() before calling vn_rdwr().  We also call kern_yield()
+vfs_vnops.c:		 * write full blocks except possibly for the first and last
+vfs_vnops.c:			bwillwrite();
+vfs_vnops.c: * File table vnode write routine.
+vfs_vnops.c:vn_write(fp, uio, active_cred, flags, td)
+vfs_vnops.c:		bwillwrite();
+vfs_vnops.c:	    (error = vn_start_write(vp, &mp, V_WAIT | PCATCH)) != 0)
+vfs_vnops.c:	if (MNT_SHARED_WRITES(mp) ||
+vfs_vnops.c:	    (mp == NULL && MNT_SHARED_WRITES(vp->v_mount))) {
+vfs_vnops.c:	error = mac_vnode_check_write(active_cred, fp->f_cred, vp);
+vfs_vnops.c:		error = VOP_WRITE(vp, uio, ioflag, fp->f_cred);
+vfs_vnops.c:		vn_finished_write(mp);
+vfs_vnops.c:		 * write(2).
+vfs_vnops.c: * The vn_io_fault() is a wrapper around vn_read() and vn_write() to
+vfs_vnops.c: * not allow page faults to happen during VOP_READ() or VOP_WRITE().
+vfs_vnops.c:		} else if (uio->uio_rw == UIO_WRITE) {
+vfs_vnops.c:			return (VOP_WRITE(args->args.vop_args.vp, uio,
+vfs_vnops.c:	prot = uio->uio_rw == UIO_READ ? VM_PROT_WRITE : VM_PROT_READ;
+vfs_vnops.c:	doio = uio->uio_rw == UIO_READ ? vn_read : vn_write;
+vfs_vnops.c: * object cleanup revoking the write access from page mappings.
+vfs_vnops.c:	case UIO_WRITE:
+vfs_vnops.c:		transp_uio.uio_rw = UIO_WRITE;
+vfs_vnops.c:	case UIO_WRITE:
+vfs_vnops.c:	error = vn_start_write(vp, &mp, V_WAIT | PCATCH);
+vfs_vnops.c:	error = mac_vnode_check_write(active_cred, fp->f_cred, vp);
+vfs_vnops.c:	error = vn_writechk(vp);
+vfs_vnops.c:	vn_finished_write(mp);
+vfs_vnops.c: * Preparing to start a filesystem write operation. If the operation is
+vfs_vnops.c:vn_start_write_locked(struct mount *mp, int flags)
+vfs_vnops.c:	mp->mnt_writeopcount++;
+vfs_vnops.c:vn_start_write(struct vnode *vp, struct mount **mpp, int flags)
+vfs_vnops.c:	 * to which it will write.
+vfs_vnops.c:		if ((error = VOP_GETWRITEMOUNT(vp, mpp)) != 0) {
+vfs_vnops.c:	 * VOP_GETWRITEMOUNT() returns with the mp refcount held through
+vfs_vnops.c:	return (vn_start_write_locked(mp, flags));
+vfs_vnops.c: * completed (indicated by mnt_writeopcount dropping to zero). At that
+vfs_vnops.c:vn_start_secondary_write(struct vnode *vp, struct mount **mpp, int flags)
+vfs_vnops.c:		if ((error = VOP_GETWRITEMOUNT(vp, mpp)) != 0) {
+vfs_vnops.c:	 * VOP_GETWRITEMOUNT() returns with the mp refcount held through
+vfs_vnops.c:		mp->mnt_secondary_writes++;
+vfs_vnops.c:		mp->mnt_secondary_accwrites++;
+vfs_vnops.c: * Filesystem write operation has completed. If we are suspending and this
+vfs_vnops.c:vn_finished_write(mp)
+vfs_vnops.c:	mp->mnt_writeopcount--;
+vfs_vnops.c:	if (mp->mnt_writeopcount < 0)
+vfs_vnops.c:		panic("vn_finished_write: neg cnt");
+vfs_vnops.c:	    mp->mnt_writeopcount <= 0)
+vfs_vnops.c:		wakeup(&mp->mnt_writeopcount);
+vfs_vnops.c: * Filesystem secondary write operation has completed. If we are
+vfs_vnops.c:vn_finished_secondary_write(mp)
+vfs_vnops.c:	mp->mnt_secondary_writes--;
+vfs_vnops.c:	if (mp->mnt_secondary_writes < 0)
+vfs_vnops.c:		panic("vn_finished_secondary_write: neg cnt");
+vfs_vnops.c:	    mp->mnt_secondary_writes <= 0)
+vfs_vnops.c:		wakeup(&mp->mnt_secondary_writes);
+vfs_vnops.c: * Request a filesystem to suspend write operations.
+vfs_vnops.c:vfs_write_suspend(struct mount *mp, int flags)
+vfs_vnops.c:	 * Unmount holds a write reference on the mount point.  If we
+vfs_vnops.c:	 * own busy reference and drain for writers, we deadlock with
+vfs_vnops.c:	 * vfs_write_suspend() must specify VS_SKIP_UNMOUNT if
+vfs_vnops.c:	if (mp->mnt_writeopcount > 0)
+vfs_vnops.c:		(void) msleep(&mp->mnt_writeopcount, 
+vfs_vnops.c:		vfs_write_resume(mp, 0);
+vfs_vnops.c: * Request a filesystem to resume write operations.
+vfs_vnops.c:vfs_write_resume(struct mount *mp, int flags)
+vfs_vnops.c:		wakeup(&mp->mnt_writeopcount);
+vfs_vnops.c:		if ((flags & VR_START_WRITE) != 0) {
+vfs_vnops.c:			mp->mnt_writeopcount++;
+vfs_vnops.c:	} else if ((flags & VR_START_WRITE) != 0) {
+vfs_vnops.c:		vn_start_write_locked(mp, 0);
+vfs_vnops.c: * Helper loop around vfs_write_suspend() for filesystem unmount VFS
+vfs_vnops.c:vfs_write_suspend_umnt(struct mount *mp)
+vfs_vnops.c:	    ("vfs_write_suspend_umnt: recursed"));
+vfs_vnops.c:	/* dounmount() already called vn_start_write(). */
+vfs_vnops.c:		vn_finished_write(mp);
+vfs_vnops.c:		error = vfs_write_suspend(mp, 0);
+vfs_vnops.c:			vn_start_write(NULL, &mp, V_WAIT);
+vfs_vnops.c:		vn_start_write(NULL, &mp, V_WAIT);
+vfs_vnops.c:	auio.uio_rw = UIO_WRITE;
+vfs_vnops.c:		if ((error = vn_start_write(vp, &mp, V_WAIT)) != 0)
+vfs_vnops.c:		vn_finished_write(mp);
+vfs_vnops.c:		if ((error = vn_start_write(vp, &mp, V_WAIT)) != 0)
+vfs_vnops.c:		vn_finished_write(mp);
+vfs_vnops.c:	 * the super-user, or has ACL_WRITE_ATTRIBUTES permission on
+vfs_vnops.c:	 * on the file.  If the time pointer is null, then write
+vfs_vnops.c:	 * A user having ACL_WRITE_DATA or ACL_WRITE_ATTRIBUTES
+vfs_vnops.c:	error = VOP_ACCESSX(vp, VWRITE_ATTRIBUTES, cred, td);
+vfs_vnops.c:		error = VOP_ACCESS(vp, VWRITE, cred, td);
+vfs_vnops.c:	boolean_t writecounted;
+vfs_vnops.c:	 * read(2)/write(2) -- or even open(2).  Thus, we can
+vfs_vnops.c:	 * are trying to get write permission although we opened it
+vfs_vnops.c:		if ((fp->f_flag & FWRITE) != 0)
+vfs_vnops.c:			maxprot |= VM_PROT_WRITE;
+vfs_vnops.c:		else if ((prot & VM_PROT_WRITE) != 0)
+vfs_vnops.c:		maxprot |= VM_PROT_WRITE;
+vfs_vnops.c:		cap_maxprot |= VM_PROT_WRITE;
+vfs_vnops.c:	writecounted = FALSE;
+vfs_vnops.c:	    &foff, &object, &writecounted);
+vfs_vnops.c:	    foff, writecounted, td);
+vfs_vnops.c:		 * writecount, then undo that now.
+vfs_vnops.c:		if (writecounted)
+vfs_vnops.c:			vnode_pager_release_writecount(object, 0, size);
+vnode_if.src:%% write	vp	L L L
+vnode_if.src:%! write	pre	VOP_WRITE_PRE
+vnode_if.src:%! write	post	VOP_WRITE_POST
+vnode_if.src:vop_write {
+vnode_if.src:%% getwritemount vp	= = =
+vnode_if.src:vop_getwritemount {
+vnode_if.src:%% get_writecount	vp	L L L
+vnode_if.src:vop_get_writecount {
+vnode_if.src:	OUT int *writecount;
+vnode_if.src:%% add_writecount	vp	E E E
+vnode_if.src:vop_add_writecount {
