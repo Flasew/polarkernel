@@ -11,13 +11,14 @@
 #include <sys/event.h>
 #include <sys/file.h>
 #include <sys/uio.h>
+#include <sys/conf.h>
 
 //  catfile get from stack overflow
 static int catfile(const char *filename) {
     struct sbuf *sb;
     static char buf[128] = { 0 };
     struct nameidata nd;
-    // off_t ofs;
+    off_t ofs;
     // ssize_t resid;
     int error, flags, len;
 
@@ -35,27 +36,27 @@ static int catfile(const char *filename) {
     ofs = 0;
     len = sizeof(buf) - 1;
     sb = sbuf_new_auto();
-    int loopc = 0;
+    // int loopc = 0;
 
     struct iovec iodata = {
         buf,
         128
-    }
+    };
 
     struct uio fuio = {
-        iodata, 
+        &iodata, 
         1,
         0,
         4096,
         UIO_SYSSPACE,
         UIO_READ,
         curthread
-    }
+    };
 
     nd.ni_vp->v_un.vu_cdev->si_devsw->
         d_read(nd.ni_vp->v_un.vu_cdev, &fuio, 0);
 
-    uprintf("buf contains: %s", buf)
+    uprintf("buf contains: %s", buf);
     // while (1) {
     //     uprintf("loop %d: \n", loopc);
     //     error = vn_rdwr_inchunks(UIO_READ, nd.ni_vp, buf, len, ofs,
