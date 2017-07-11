@@ -109,28 +109,6 @@ echo_read(struct cdev * dev, struct uio * uio, int ioflag){
     return error;
 }
 
-// static int
-// echo_set_buffer_size(int size){
-//     int error = 0;
-// 
-//     if (echo_message->buffer_size == size)
-//         return error;
-// 
-//     if (size >= 128 && size <= 512){
-//         echo_message->buffer = realloc(echo_message->buffer, size,
-//             M_ECHO, M_WAITOK);
-//         echo_message->buffer_size = size;
-// 
-//         if (echo_message->length >= size){
-//             echo_message->length = size - 1;
-//             echo_message->buffer[size - 1] = '\0';
-//         }
-//     }
-//     else
-//         error = EINVAL;
-//     return error;
-// }
-
 static int 
 sysctl_set_buffer_size(SYSCTL_HANDLER_ARGS){
     int error = 0;
@@ -186,7 +164,7 @@ echo_modevent(module_t mod __unused, int event, void *arg __unused){
     switch (event) {
         case MOD_LOAD:
             echo_message = malloc(sizeof(echo_t), M_ECHO, M_WAITOK);
-            echo_message->buffer_size = 256;
+            echo_message->buffer_size = BUF_SIZE;
             echo_message->buffer = malloc(echo_message->buffer_size, 
                 M_ECHO, M_WAITOK);
             sysctl_ctx_init(&clist);
